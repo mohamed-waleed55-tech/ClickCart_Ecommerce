@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../core/assets/images_manager.dart';
+import '../../model/product_model.dart';
+
 class BestSellerItem extends StatelessWidget {
-  const BestSellerItem({
-    super.key,
-    this.width,
-    this.productName = "Product Name",
-    this.shopName = "Shop Name",
-    this.price = "\$100",
-  });
+  const BestSellerItem({super.key, this.width, required this.item});
 
   final double? width;
-  final String productName;
-  final String shopName;
-  final String price;
+  final ProductModel item;
 
   @override
   Widget build(BuildContext context) {
@@ -42,15 +35,12 @@ class BestSellerItem extends StatelessWidget {
               ),
               child: Padding(
                 padding: REdgeInsets.all(14),
-                child: Image.asset(
-                  ImagesManager.img,
-                  fit: BoxFit.contain,
-                ),
+                child: Image.asset(item.image, fit: BoxFit.contain),
               ),
             ),
             SizedBox(height: 12.h),
             Text(
-              productName,
+              item.title,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.bodyMedium?.copyWith(
@@ -59,7 +49,7 @@ class BestSellerItem extends StatelessWidget {
             ),
             SizedBox(height: 4.h),
             Text(
-              shopName,
+              item.description,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.bodySmall?.copyWith(
@@ -68,7 +58,7 @@ class BestSellerItem extends StatelessWidget {
             ),
             SizedBox(height: 8.h),
             Text(
-              price,
+              "${item.price} \$",
               style: theme.textTheme.titleSmall?.copyWith(
                 color: colorScheme.primary,
                 fontWeight: FontWeight.w800,
