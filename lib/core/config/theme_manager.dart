@@ -6,7 +6,7 @@ class ThemeManager {
     brightness: Brightness.light,
     primary: Color(0xFF10B981),
     onPrimary: Colors.white,
-    secondary: Color(0xFF6EE7B7),
+    secondary: Colors.grey,
     onSecondary: Colors.black,
     error: Color(0xFFEF4444),
     onError: Colors.white,

@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/features/home/presentation/view_models/home_view_model.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -21,5 +22,6 @@ class AppBinding extends Bindings {
     );
 
     Get.lazyPut<AuthViewModel>(() => AuthViewModel(Get.find(), Get.find()));
+    Get.lazyPut<HomeViewModel>(()=>HomeViewModel());
   }
 }
