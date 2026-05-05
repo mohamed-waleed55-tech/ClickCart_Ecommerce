@@ -1,4 +1,3 @@
-import 'package:ecommerce_app/features/home/presentation/view_models/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,9 +7,10 @@ import 'package:get/get_state_manager/src/simple/get_view.dart';
 import '../../../../core/assets/svg_icons_manager.dart';
 import '../../../cart/presentation/screens/cart.dart';
 import '../../../profile/presentation/profile.dart';
-import 'home.dart';
+import '../../../home/presentation/screens/home.dart';
+import '../view_models/control_view_model.dart';
 
-class MainLayout extends GetWidget<HomeViewModel> {
+class MainLayout extends GetWidget<ControlViewModel> {
   const MainLayout({super.key});
 
   @override
@@ -18,7 +18,7 @@ class MainLayout extends GetWidget<HomeViewModel> {
     final List<Widget> screens = [Home(), Cart(), Profile()];
     return Scaffold(
       bottomNavigationBar: _buildBottomNavigationBar(context),
-      body: GetBuilder<HomeViewModel>(
+      body: GetBuilder<ControlViewModel>(
         builder: (controller) => screens[controller.navigateIndex],
       ),
     );
@@ -27,7 +27,7 @@ class MainLayout extends GetWidget<HomeViewModel> {
   Widget _buildBottomNavigationBar(BuildContext context) {
     final theme = Theme.of(context);
 
-    return GetBuilder<HomeViewModel>(
+    return GetBuilder<ControlViewModel>(
       builder: (controller) => BottomNavigationBar(
         currentIndex: controller.navigateIndex,
         onTap: controller.changeNavigateIndex,

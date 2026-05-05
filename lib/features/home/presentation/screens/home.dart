@@ -1,23 +1,16 @@
+import 'package:ecommerce_app/features/home/model/category_model.dart';
 import 'package:ecommerce_app/features/home/presentation/view_models/home_view_model.dart';
 import 'package:ecommerce_app/features/home/presentation/widgets/best_seller_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 
-import '../../../../core/assets/images_manager.dart';
-import '../../../../core/assets/svg_icons_manager.dart';
-
 class Home extends GetWidget<HomeViewModel> {
   const Home({super.key});
-
-  static const List<String> _categories = [
-    "Shoes",
-    "Bags",
-    "Watches",
-    "Clothes",
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +43,6 @@ class Home extends GetWidget<HomeViewModel> {
       ),
     );
   }
-
 
   Widget _buildHeader(BuildContext context) {
     final theme = Theme.of(context);
@@ -118,30 +110,35 @@ class Home extends GetWidget<HomeViewModel> {
 
     return Text(
       title,
-      style: theme.textTheme.titleMedium?.copyWith(
-        fontWeight: FontWeight.w800,
-      ),
+      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
     );
   }
 
   Widget _buildCategories(BuildContext context) {
-    return SizedBox(
-      height: 96.h,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: _categories.length,
-        separatorBuilder: (_, __) => SizedBox(width: 14.w),
-        itemBuilder: (context, index) {
-          return _buildCategoryItem(context, index);
-        },
+    return GetBuilder(
+      init: HomeViewModel(Get.find(), Get.find()),
+      builder: (controller) => SizedBox(
+        height: 96.h,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          itemCount: controller.categories.length,
+          separatorBuilder: (_, __) => SizedBox(width: 14.w),
+          itemBuilder: (context, index) {
+            final item = controller.categories[index];
+            return _buildCategoryItem(context, index, item);
+          },
+        ),
       ),
     );
   }
 
-  Widget _buildCategoryItem(BuildContext context, int index) {
+  Widget _buildCategoryItem(
+    BuildContext context,
+    int index,
+    CategoryModel item,
+  ) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final item = _categories[index];
 
     return SizedBox(
       width: 76.w,
@@ -156,12 +153,12 @@ class Home extends GetWidget<HomeViewModel> {
             ),
             child: Padding(
               padding: REdgeInsets.all(12),
-              child: Image.asset(ImagesManager.facebook),
+              child: Image.asset(item.image),
             ),
           ),
           SizedBox(height: 8.h),
           Text(
-            item,
+            item.categoryName,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: theme.textTheme.bodySmall?.copyWith(
@@ -196,22 +193,28 @@ class Home extends GetWidget<HomeViewModel> {
   }
 
   Widget _buildBestSellerList() {
-    return Expanded(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final itemSpacing = 8.w;
-          final itemWidth = (constraints.maxWidth - itemSpacing) / 2;
+    return GetX<HomeViewModel>(
+      init: HomeViewModel(Get.find(), Get.find()),
+      builder: (controller) => controller.isLoading.value
+          ? const Center(child: CircularProgressIndicator())
+          : Expanded(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final itemSpacing = 8.w;
+                  final itemWidth = (constraints.maxWidth - itemSpacing) / 2;
 
-          return ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: 10,
-            separatorBuilder: (_, __) => SizedBox(width: itemSpacing),
-            itemBuilder: (context, index) {
-              return BestSellerItem(width: itemWidth);
-            },
-          );
-        },
-      ),
+                  return ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: controller.products.length,
+                    separatorBuilder: (_, __) => SizedBox(width: itemSpacing),
+                    itemBuilder: (context, index) {
+                      final item = controller.products[index];
+                      return BestSellerItem(width: itemWidth, item: item);
+                    },
+                  );
+                },
+              ),
+            ),
     );
   }
 }
