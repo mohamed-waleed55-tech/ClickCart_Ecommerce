@@ -1,7 +1,12 @@
-import 'package:ecommerce_app/view/ecommerce_app.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main(){
-  runApp(EcommerceApp());
+import 'features/ecommerce_app.dart';
+import 'firebase_options.dart';
 
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(EcommerceApp());
 }

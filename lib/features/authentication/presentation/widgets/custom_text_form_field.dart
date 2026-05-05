@@ -7,17 +7,17 @@ class CustomTextFormField extends StatefulWidget {
     required this.label,
     required this.hint,
     required this.prefixIcon,
-    this.controller,
     this.obscureText = false,
     this.validator,
+    this.onSaved,
   });
 
   final String label;
   final String hint;
   final IconData prefixIcon;
-  final TextEditingController? controller;
   final bool obscureText;
   final String? Function(String?)? validator;
+  final void Function(String?)? onSaved;
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
@@ -37,7 +37,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     final cs = Theme.of(context).colorScheme;
 
     return TextFormField(
-      controller: widget.controller,
+      onSaved: (value) {
+        widget.onSaved?.call(value);
+      },
       validator: widget.validator,
       obscureText: _hideText,
       style: Theme.of(context).textTheme.bodySmall,
@@ -51,12 +53,14 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         prefixIcon: Icon(widget.prefixIcon, size: 20.sp, color: cs.primary),
         suffixIcon: widget.obscureText
             ? IconButton(
-          onPressed: () => setState(() => _hideText = !_hideText),
-          icon: Icon(
-            _hideText ? Icons.visibility_off_rounded : Icons.visibility_rounded,
-            size: 20.sp,
-          ),
-        )
+                onPressed: () => setState(() => _hideText = !_hideText),
+                icon: Icon(
+                  _hideText
+                      ? Icons.visibility_off_rounded
+                      : Icons.visibility_rounded,
+                  size: 20.sp,
+                ),
+              )
             : null,
         labelStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
           color: cs.onSurfaceVariant,
@@ -73,31 +77,19 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14.r),
-          borderSide: BorderSide(
-            color: cs.outlineVariant,
-            width: 1.w,
-          ),
+          borderSide: BorderSide(color: cs.outlineVariant, width: 1.w),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14.r),
-          borderSide: BorderSide(
-            color: cs.primary,
-            width: 1.6.w,
-          ),
+          borderSide: BorderSide(color: cs.primary, width: 1.6.w),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14.r),
-          borderSide: BorderSide(
-            color: cs.error,
-            width: 1.4.w,
-          ),
+          borderSide: BorderSide(color: cs.error, width: 1.4.w),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14.r),
-          borderSide: BorderSide(
-            color: cs.error,
-            width: 1.8.w,
-          ),
+          borderSide: BorderSide(color: cs.error, width: 1.8.w),
         ),
       ),
     );
