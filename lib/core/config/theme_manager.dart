@@ -17,6 +17,7 @@ class ThemeManager {
   );
 
   static final ThemeData light = ThemeData(
+    fontFamily: "SourceSans",
     useMaterial3: true,
     colorScheme: colorScheme,
 
@@ -40,8 +41,14 @@ class ThemeManager {
         fontSize: 16.sp,
         fontWeight: FontWeight.bold,
         color: colorScheme.onSecondary,
-      )
+      ),
+      headlineSmall: TextStyle(
+        fontSize: 16.sp,
+        fontWeight: FontWeight.w500,
+        color: colorScheme.secondary.withOpacity(0.9),
+      ),
     ),
+
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: colorScheme.primary,
@@ -49,9 +56,7 @@ class ThemeManager {
           borderRadius: BorderRadius.circular(10.0),
         ),
       ),
-    )
+    ),
   );
-  static final ThemeData dark= ThemeData(
-
-  );
+  static final ThemeData dark = ThemeData();
 }

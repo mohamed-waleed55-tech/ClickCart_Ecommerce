@@ -4,10 +4,6 @@ import 'package:ecommerce_app/features/home/presentation/widgets/best_seller_ite
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
 
 class Home extends GetWidget<HomeViewModel> {
   const Home({super.key});
@@ -115,14 +111,13 @@ class Home extends GetWidget<HomeViewModel> {
   }
 
   Widget _buildCategories(BuildContext context) {
-    return GetBuilder(
-      init: HomeViewModel(Get.find(), Get.find()),
+    return GetBuilder<HomeViewModel>(
       builder: (controller) => SizedBox(
         height: 96.h,
         child: ListView.separated(
           scrollDirection: Axis.horizontal,
           itemCount: controller.categories.length,
-          separatorBuilder: (_, __) => SizedBox(width: 14.w),
+          separatorBuilder: (_, _) => SizedBox(width: 14.w),
           itemBuilder: (context, index) {
             final item = controller.categories[index];
             return _buildCategoryItem(context, index, item);
@@ -194,7 +189,6 @@ class Home extends GetWidget<HomeViewModel> {
 
   Widget _buildBestSellerList() {
     return GetX<HomeViewModel>(
-      init: HomeViewModel(Get.find(), Get.find()),
       builder: (controller) => controller.isLoading.value
           ? const Center(child: CircularProgressIndicator())
           : Expanded(
@@ -206,7 +200,7 @@ class Home extends GetWidget<HomeViewModel> {
                   return ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: controller.products.length,
-                    separatorBuilder: (_, __) => SizedBox(width: itemSpacing),
+                    separatorBuilder: (_, _) => SizedBox(width: itemSpacing),
                     itemBuilder: (context, index) {
                       final item = controller.products[index];
                       return BestSellerItem(width: itemWidth, item: item);
