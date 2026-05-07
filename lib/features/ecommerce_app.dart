@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/features/home/presentation/screens/details.dart';
 import 'package:ecommerce_app/helper/binding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,6 +7,7 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 
 import '../core/auth_gate/auth_gate.dart';
 import '../core/config/theme_manager.dart';
+import '../core/navigation/app_routes.dart';
 import 'authentication/presentation/screens/login_screen.dart';
 
 class EcommerceApp extends StatelessWidget {
@@ -25,7 +27,8 @@ class EcommerceApp extends StatelessWidget {
           theme: ThemeManager.light,
           darkTheme: ThemeManager.dark,
           themeMode: ThemeMode.system,
-          home: AuthGate(),
+          getPages: AppPages.pages,
+          initialRoute: AppRoutes.authGate,
         );
       },
     );

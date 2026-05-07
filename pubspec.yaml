@@ -69,6 +69,12 @@ flutter:
   assets:
      - lib/core/assets/images/
      - lib/core/assets/svg_icons/
+     - lib/core/assets/fonts/
+  fonts:
+    - family: SourceSans
+      fonts:
+        - asset: lib/core/assets/fonts/SourceSans.ttf
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

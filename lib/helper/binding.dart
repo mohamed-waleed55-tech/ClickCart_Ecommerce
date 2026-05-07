@@ -25,6 +25,7 @@ class AppBinding extends Bindings {
     Get.lazyPut<UserRepository>(
       () => UserFirestoreRepository(FirebaseFirestore.instance),
     );
+
     Get.lazyPut<ProductsRepository>(() => ProductsRepositoryImp());
 
     Get.lazyPut<AuthViewModel>(() => AuthViewModel(Get.find(), Get.find()));
