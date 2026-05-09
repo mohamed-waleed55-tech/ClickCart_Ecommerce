@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CustomTextFormField extends StatefulWidget {
   const CustomTextFormField({
     super.key,
-    required this.label,
     required this.hint,
     required this.prefixIcon,
     this.obscureText = false,
@@ -12,7 +11,6 @@ class CustomTextFormField extends StatefulWidget {
     this.onSaved,
   });
 
-  final String label;
   final String hint;
   final IconData prefixIcon;
   final bool obscureText;
@@ -44,7 +42,6 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       obscureText: _hideText,
       style: Theme.of(context).textTheme.bodySmall,
       decoration: InputDecoration(
-        labelText: widget.label,
         hintText: widget.hint,
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 20.h),

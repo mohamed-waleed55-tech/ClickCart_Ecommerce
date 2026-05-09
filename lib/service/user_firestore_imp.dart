@@ -8,7 +8,7 @@ class UserFirestoreImp extends UserFirestore {
 
   @override
   Future<void> addUserToFirestore(UserModel user) async {
-    _userCollection.doc(user.id).set(user.toMap());
+    _userCollection.doc(user.id).set(user.toJson());
 
   }
 }

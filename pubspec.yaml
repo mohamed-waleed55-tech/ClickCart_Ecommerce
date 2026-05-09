@@ -42,10 +42,22 @@ dependencies:
   flutter_facebook_auth: ^7.0.0
   cloud_firestore: ^6.3.0
   flutter_svg: ^2.2.4
+  retrofit: ^4.9.0
+  logger: ^2.6.0  # for logging purpose
+  json_annotation: ^4.9.0
+  dio: ^5.9.2
+  freezed: ^3.2.5
+  freezed_annotation: ^3.1.0
+  ionicons: ^0.2.2
+
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  retrofit_generator: ^10.0.1
+  build_runner: ^2.6.0
+  json_serializable: ^6.10.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -73,7 +85,12 @@ flutter:
   fonts:
     - family: SourceSans
       fonts:
-        - asset: lib/core/assets/fonts/SourceSans.ttf
+        - asset: lib/core/assets/fonts/SourceSans-Regular.ttf
+          weight: 400
+        - asset: lib/core/assets/fonts/SourceSans-Bold.ttf
+          weight: 700
+        - asset: lib/core/assets/fonts/SourceSans-SemiBold.ttf
+          weight: 600
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

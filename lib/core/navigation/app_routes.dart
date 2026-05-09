@@ -1,6 +1,7 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
 import '../../features/authentication/presentation/screens/login_screen.dart';
+import '../../features/home/presentation/screens/category_products.dart';
 import '../../features/home/presentation/screens/details.dart';
 import '../../features/main_layout/presentation/screens/main_layout.dart';
 import '../auth_gate/auth_gate.dart';
@@ -11,6 +12,8 @@ abstract final class AppRoutes {
   static const productDetails = "/product-details";
   static const mainLayout = "/main-layout";
   static const signUp = "/sign-up";
+  static const categoryProducts = "/category-products";
+
 }
 class AppPages {
   static final pages = [
@@ -34,6 +37,11 @@ class AppPages {
       name: AppRoutes.signUp,
       page: () => LoginScreen(),
     ),
-
+    GetPage(
+      name: AppRoutes.categoryProducts,
+      page: () => const CategoryProductsView(),
+    ),
   ];
 }
+
+

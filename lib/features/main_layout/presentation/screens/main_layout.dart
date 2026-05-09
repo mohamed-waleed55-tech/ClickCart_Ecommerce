@@ -15,7 +15,7 @@ class MainLayout extends GetWidget<ControlViewModel> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> screens = [Home(), Cart(), Profile()];
+    final List<Widget> screens = [HomeView(), Cart(), Profile()];
     return Scaffold(
       bottomNavigationBar: _buildBottomNavigationBar(context),
       body: GetBuilder<ControlViewModel>(
@@ -41,7 +41,10 @@ class MainLayout extends GetWidget<ControlViewModel> {
               height: 24.h,
             ),
             label: "",
-            activeIcon: Text("Explore", style: theme.textTheme.titleSmall),
+            activeIcon: Text("Explore", style: theme.textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: theme.colorScheme.primary
+            )),
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
@@ -50,7 +53,10 @@ class MainLayout extends GetWidget<ControlViewModel> {
               height: 24.sp,
             ),
             label: "",
-            activeIcon: Text("Cart", style: theme.textTheme.titleSmall),
+            activeIcon: Text("Cart", style: theme.textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.primary
+            )),
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
@@ -59,7 +65,10 @@ class MainLayout extends GetWidget<ControlViewModel> {
               height: 24.sp,
             ),
             label: "",
-            activeIcon: Text("Profile", style: theme.textTheme.titleSmall),
+            activeIcon: Text("Profile", style: theme.textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: theme.colorScheme.primary
+            )),
           ),
         ],
       ),

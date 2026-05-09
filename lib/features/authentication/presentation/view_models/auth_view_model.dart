@@ -6,8 +6,6 @@ import '../../data/auth_repository/auth_repositroy.dart';
 import '../../data/user_repository/user_repositroy.dart';
 import '../../model/user_model.dart';
 
-
-
 class AuthViewModel extends GetxController {
   final AuthRepository authRepo;
   final UserRepository userRepo;
@@ -27,6 +25,16 @@ class AuthViewModel extends GetxController {
   void onInit() {
     super.onInit();
     firebaseUser.bindStream(FirebaseAuth.instance.authStateChanges());
+
+    ever(firebaseUser, (User? user) async {
+      if (user != null) {
+        try {
+          await user.reload();
+        } catch (e) {
+          signOut();
+        }
+      }
+    });
   }
 
   Future<void> signInWithGoogle() async {
@@ -41,7 +49,11 @@ class AuthViewModel extends GetxController {
     try {
       isLoading.value = true;
 
-      await authRepo.signInWithEmailAndPassword(email, password);
+      UserCredential credential = await authRepo.signInWithEmailAndPassword(
+        email,
+        password,
+      );
+      firebaseUser.value = credential.user;
     } catch (e) {
       Get.snackbar("Error", e.toString());
     } finally {
@@ -79,6 +91,7 @@ class AuthViewModel extends GetxController {
       name: resolvedName,
       email: user.email ?? '',
       pic: user.photoURL ?? '',
+      cart: [],
     );
 
     userRepo.saveUser(userModel);
@@ -91,6 +104,5 @@ class AuthViewModel extends GetxController {
       Get.snackbar("Error", e.toString());
     }
   }
-  Future<void>googlesignin() async {
-  }
+
 }
