@@ -11,6 +11,8 @@ class FirestoreProduct {
   String? image;
   double? discountPercentage;
   int? quantity;
+  @JsonKey(name: 'is_synced', defaultValue: 0)
+  int? isSynced;
 
   FirestoreProduct({
     required this.id,
@@ -20,6 +22,7 @@ class FirestoreProduct {
     required this.image,
     required this.discountPercentage,
     required this.quantity,
+    this.isSynced = 0,
   });
 
   factory FirestoreProduct.fromJson(Map<String, dynamic> json) =>
