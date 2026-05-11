@@ -1,14 +1,14 @@
-import 'package:ecommerce_app/features/authentication/data/user_repository/user_repositroy.dart';
 import 'package:ecommerce_app/features/home/data/products_repository/api_result.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../cart/data/cart_repository/cart_repository.dart';
 import '../../../cart/model/firestore_product.dart';
+import '../../data/api_error_handling/network_exceptions.dart';
 import '../../data/products_repository/products_repository.dart';
 import '../../model/api_response/product_model.dart';
 import '../../model/categorey/category_model.dart';
 class HomeViewModel extends GetxController {
-  final  UserRepository _userRepository;
   final ProductsRepository _productsRepository;
 
   RxList<ProductModel> products = <ProductModel>[].obs;
@@ -25,7 +25,7 @@ class HomeViewModel extends GetxController {
 
 
 
-  HomeViewModel(this._userRepository, this._productsRepository);
+  HomeViewModel( this._productsRepository);
 
   @override
   void onInit() {
@@ -95,24 +95,5 @@ class HomeViewModel extends GetxController {
     isSearching.value = false;
     filteredProducts.clear();
   }
-  void addProductToCart(ProductModel product)async {
-    FirestoreProduct firestoreProduct = FirestoreProduct(
-      id: product.id,
-      title: product.title,
-      price: product.price.toString(),
-      stock: product.stock.toString(),
-      image: product.thumbnail,
-      discountPercentage: product.discountPercentage,
-      quantity: 1,
-    );
 
-    try{
-      await _userRepository.addProductToCart(firestoreProduct);
-      Get.snackbar("Success", "Product added to cart");
-
-
-    }catch(e){
-      Get.snackbar("Error", "Failed to add product to cart");
-    }
-  }
 }
