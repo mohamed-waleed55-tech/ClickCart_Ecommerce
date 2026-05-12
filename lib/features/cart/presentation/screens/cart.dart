@@ -31,11 +31,14 @@ class Cart extends GetView<CartViewModel> {
             if (controller.cartProducts.isEmpty) {
               return const Center(child: Text("Your cart is empty"));
             }
-            return ListView.builder(
+            return ListView.separated(
               padding: EdgeInsets.only(bottom: 160.h, left: 20.w, right: 20.w),
               itemCount: controller.cartProducts.length,
               itemBuilder: (context, index) {
                 return CartItemWidget(product: controller.cartProducts[index]);
+              },
+              separatorBuilder: (context, index) {
+                return SizedBox(height: 16.h);
               },
             );
           }),
@@ -93,7 +96,6 @@ class Cart extends GetView<CartViewModel> {
       ),
       child: Row(
         children: [
-          // الـ Total Price
           Expanded(
             flex: 3,
             child: Column(
