@@ -34,7 +34,6 @@ class CartSyncManager extends GetxService {
           .getUnSyncedProducts();
 
       if (unSyncedItems.isEmpty) {
-        print("السلة نظيفة ومتزامنة ومفيش حاجة تترفع.");
         return;
       }
 

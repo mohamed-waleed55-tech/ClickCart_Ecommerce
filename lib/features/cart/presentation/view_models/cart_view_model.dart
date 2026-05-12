@@ -118,13 +118,12 @@ class CartViewModel extends GetxController {
     await _cartRepository.removeProductFromCart(product.id!);
   }
 
-  // ✅ الدالة المحدثة والمثالية للإضافة الفورية وتحديث الـ UI
   void addProductToCart(ProductModel product) async {
     FirestoreProduct firestoreProduct = FirestoreProduct(
       id: product.id,
       title: product.title,
-      price: product.price.toString(),
-      stock: product.stock.toString(),
+      price: product.price,
+      stock: product.stock,
       image: product.thumbnail,
       discountPercentage: product.discountPercentage,
       quantity: 1,
@@ -134,14 +133,12 @@ class CartViewModel extends GetxController {
     if (index != -1) {
       int newQty = (cartProducts[index].quantity ?? 1) + 1;
       cartProducts[index] = cartProducts[index]..quantity = newQty;
-      cartProducts.refresh(); // إجبار الـ RxList على تحديث الـ UI
+      cartProducts.refresh();
     } else {
-      // منتج جديد، نضيفه مباشرة إلى القائمة الـ Reactive
       cartProducts.add(firestoreProduct);
     }
 
     try {
-      // 2️⃣ إرسال الطلب وحفظه في الـ Database والسيرفر في الخلفية
       await _cartRepository.addProductToCart(firestoreProduct);
       Get.snackbar("Success", "Product added to cart successfully!");
     } catch (e, stackTrace) {

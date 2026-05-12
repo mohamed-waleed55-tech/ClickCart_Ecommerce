@@ -6,11 +6,12 @@ part 'firestore_product.g.dart';
 class FirestoreProduct {
   int? id;
   String? title;
-  String? price;
-  String? stock;
+  double? price;
+  int? stock;
   String? image;
   double? discountPercentage;
   int? quantity;
+
   @JsonKey(name: 'is_synced', defaultValue: 0)
   int? isSynced;
 
@@ -29,4 +30,26 @@ class FirestoreProduct {
       _$FirestoreProductFromJson(json);
 
   Map<String, dynamic> toJson() => _$FirestoreProductToJson(this);
+
+  FirestoreProduct copyWith({
+    int? id,
+    String? title,
+    double? price,
+    int? stock,
+    String? image,
+    double? discountPercentage,
+    int? quantity,
+    int? isSynced,
+  }) {
+    return FirestoreProduct(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      price: price ?? this.price,
+      stock: stock ?? this.stock,
+      image: image ?? this.image,
+      discountPercentage: discountPercentage ?? this.discountPercentage,
+      quantity: quantity ?? this.quantity,
+      isSynced: isSynced ?? this.isSynced,
+    );
+  }
 }

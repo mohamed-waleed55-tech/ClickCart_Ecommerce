@@ -1,8 +1,12 @@
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+
 import '../../../home/data/api_error_handling/network_exceptions.dart';
 import '../../model/firestore_product.dart';
 import '../../model/firestore_result.dart';
 import '../data_sources/local_data_source/cart_local_data_source.dart';
 import '../data_sources/remote_data_source/cart_remote_data_source.dart';
+import '../sync_manager/sync_manager.dart';
 import 'cart_repository.dart';
 
 class CartRepositoryImp implements CartRepository {
@@ -14,13 +18,15 @@ class CartRepositoryImp implements CartRepository {
   @override
   Future<void> addProductToCart(FirestoreProduct product) async {
     try {
-      await Future.wait([
-        _localDataSource.insertOrUpdateProduct(product),
-        _remoteDataSource.addToRemoteCart(product),
-      ]);
-      print("✅ تم الحفظ في الـ Local والـ Remote بنجاح بالتوازي!");
+      final localProduct = product.copyWith(isSynced: 0);
+
+      await _localDataSource.insertOrUpdateProduct(localProduct);
+      print("✅ تم الحفظ في قاعدة البيانات المحلية بنجاح. الـ SyncManager سيتولى الرفع لاحقاً.");
+
+      Get.find<CartSyncManager>().syncLocalCartToFirestore();
+
     } catch (e) {
-      print("🚨 حصلت مشكلة أثناء الحفظ: $e");
+      print("🚨 حصلت مشكلة أثناء الحفظ المحلي: $e");
     }
   }
 

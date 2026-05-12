@@ -33,7 +33,7 @@ class CartItemWidget extends GetView<CartViewModel> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
-            BoxShadow(color: Colors.grey.withOpacity(0.2), blurRadius: 5, offset: const Offset(0, 2))
+            BoxShadow(color: Colors.grey.withOpacity(0.4), blurRadius: 5, offset: const Offset(0, 2))
           ],
         ),
         child: Row(

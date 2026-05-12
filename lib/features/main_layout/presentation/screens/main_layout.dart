@@ -83,9 +83,10 @@ class MainLayout extends GetWidget<ControlViewModel> {
     final Color iconColor = isSelected ? activeIconColor : Colors.white;
 
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w ),
       alignment: Alignment.center,
-      padding: EdgeInsets.all(8.h),
       child: Column(
+
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -100,7 +101,7 @@ class MainLayout extends GetWidget<ControlViewModel> {
           if (isSelected) ...[
             SizedBox(height: 4.h),
             Padding(
-              padding: REdgeInsets.all(8.0),
+              padding:  REdgeInsets.all(8.0),
               child: Text(
                 label,
                 style: textTheme.titleSmall?.copyWith(

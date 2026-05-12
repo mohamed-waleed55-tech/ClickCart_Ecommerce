@@ -15,10 +15,10 @@ class DatabaseHelper {
     return _database!;
   }
 
-  Future<Database?> _initDatabase() async {
+  Future<Database> _initDatabase() async {
     final String path = join(await getDatabasesPath(), 'cart_v2.db');
 
-    _database = await openDatabase(
+     return await openDatabase(
       path,
       version: 1,
       onCreate: (db, version) async {
@@ -34,9 +34,9 @@ class DatabaseHelper {
         is_synced INTEGER NOT NULL DEFAULT 0 
       )
       ''');
+        print("✅ تم إنشاء جدول السلة بنجاح لأول مرة!");
       },
     );
-    return _database;
   }
 
   Future<void> close() async {
