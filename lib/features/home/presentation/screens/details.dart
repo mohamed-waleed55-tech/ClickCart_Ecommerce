@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../../../cart/presentation/view_models/cart_view_model.dart';
 import '../../model/api_response/product_model.dart';
-import '../view_models/home_view_model.dart';
 
-class ProductDetails extends GetView<HomeViewModel> {
+class ProductDetails extends GetView<CartViewModel> {
   const ProductDetails({super.key});
 
   @override
@@ -220,6 +220,7 @@ class ProductDetails extends GetView<HomeViewModel> {
       color: Colors.white,
       child: ElevatedButton(
         onPressed: () {
+
           controller.addProductToCart(Get.arguments);
         },
         style: ElevatedButton.styleFrom(
