@@ -25,43 +25,5 @@ class UserFirestoreRepository implements UserRepository {
       await doc.set(user.toJson());
     }
   }
-
-
-  @override
-  Future<void> addProductToCart(FirestoreProduct product) async {
-    try {
-      String? userId = FirebaseAuth.instance.currentUser?.uid;
-
-      if (userId == null) {
-        throw Exception("Authentication required");
-      }
-
-      await _firestore.collection('users').doc(userId).update({
-        'cart': FieldValue.arrayUnion([product.toJson()])
-      });
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  @override
-  Future<ApiResult<List<FirestoreProduct>>> getCartProducts() async {
-    String? userId = FirebaseAuth.instance.currentUser?.uid;
-
-      final snapshot = await _firestore.collection('users').doc(userId).get();
-
-      if (snapshot.exists && snapshot.data() != null) {
-
-        final List<dynamic> cartData = snapshot.data()?['cart'] ?? [];
-
-        List<FirestoreProduct> cartProducts = cartData.map((item) {
-          return FirestoreProduct.fromJson(item as Map<String, dynamic>);
-        }).toList();
-
-        return ApiResult.success(cartProducts);
-      } else {
-        return const ApiResult.success([]);
-      }
-
-  }
 }
+

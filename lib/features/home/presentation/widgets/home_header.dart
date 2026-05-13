@@ -18,6 +18,7 @@ class HomeHeader extends StatelessWidget {
                 "Discover",
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w800,
+                  color: theme.colorScheme.primary,
                 ),
               ),
               SizedBox(height: 4.h),

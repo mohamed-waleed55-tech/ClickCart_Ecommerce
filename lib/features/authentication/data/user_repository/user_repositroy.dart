@@ -5,6 +5,4 @@ import '../../model/user_model.dart';
 
 abstract class UserRepository {
   Future<void> saveUser(UserModel user);
-  Future<void> addProductToCart(  FirestoreProduct productId);
-  Future<ApiResult<List<FirestoreProduct>>> getCartProducts() ;
 }
