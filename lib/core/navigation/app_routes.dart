@@ -6,6 +6,7 @@ import '../../features/checkout/presentation/screens/checkout.dart';
 import '../../features/home/presentation/screens/category_products.dart';
 import '../../features/home/presentation/screens/details.dart';
 import '../../features/main_layout/presentation/screens/main_layout.dart';
+import '../../features/onboarding/presentation/screens/onboaeding_view.dart';
 import '../../features/profile/presentation/screens/orders_history.dart';
 import '../auth_gate/auth_gate.dart';
 
@@ -19,6 +20,7 @@ abstract final class AppRoutes {
   static const checkout = "/checkout";
   static const profile = "/profile";
   static const ordersHistory = "/orders-history";
+  static const onboarding = "/onboarding";
 
 }
 class AppPages {
@@ -58,6 +60,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.ordersHistory,
       page: () => OrdersHistory(),
+    ),
+    GetPage(
+      name: AppRoutes.onboarding,
+      page: () => const Onboarding(),
     ),
   ];
 }

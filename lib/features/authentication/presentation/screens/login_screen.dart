@@ -20,6 +20,7 @@ class LoginScreen extends GetWidget<AuthViewModel> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -64,7 +65,6 @@ class LoginScreen extends GetWidget<AuthViewModel> {
                       ),
                     ),
 
-                    // مسافة كافية لتجاوز انحناء الموجة
                     SizedBox(height: 80.h),
 
                     CustomTextFormField(
