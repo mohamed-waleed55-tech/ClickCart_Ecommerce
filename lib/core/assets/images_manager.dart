@@ -17,6 +17,11 @@ abstract final class ImagesManager {
   static const String home = '$base/home.png';
   static const String emptyCart = '$base/empty_cart.png';
   static const String emptyOrders = '$base/orders_empty.png';
+  static const String logo = '$base/logo.png';
+  static const String onboarding1 = '$base/onboarding1.png';
+  static const String onboarding2 = '$base/onboarding2.png';
+  static const String onboarding3 = '$base/onboarding3.png';
+
 
 
 

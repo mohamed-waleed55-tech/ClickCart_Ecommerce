@@ -17,8 +17,8 @@ class SignUp extends GetWidget<AuthViewModel> {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     return Scaffold(
-      // لجعل المحتوى يبدأ من خلف الـ AppBar
       extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -28,7 +28,7 @@ class SignUp extends GetWidget<AuthViewModel> {
           },
           icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
-            color: Colors.white, // أبيض ليتناسب مع الخلفية الخضراء
+            color: Colors.white,
           ),
         ),
       ),
@@ -48,7 +48,7 @@ class SignUp extends GetWidget<AuthViewModel> {
                     Text(
                       'Sign Up',
                       style: theme.textTheme.titleLarge?.copyWith(
-                        color: Colors.white, // أبيض ليبرز فوق الموجة
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -60,7 +60,6 @@ class SignUp extends GetWidget<AuthViewModel> {
                       ),
                     ),
 
-                    // مسافة كافية لتجاوز انحناء الموجة
                     SizedBox(height: 70.h),
 
                     CustomTextFormField(
@@ -114,8 +113,7 @@ class SignUp extends GetWidget<AuthViewModel> {
                         if (value == null || value.isEmpty) {
                           return 'Please confirm your password';
                         }
-                        // مثال بسيط لمطابقة كلمة المرور
-                        // if (value != controller.password) return 'Passwords do not match';
+                         if (value != controller.password) return 'Passwords do not match';
                         return null;
                       },
                     ),
