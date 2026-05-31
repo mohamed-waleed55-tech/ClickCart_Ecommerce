@@ -1,9 +1,12 @@
+import 'package:ecommerce_app/features/profile/presentation/screens/profile.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
 import '../../features/authentication/presentation/screens/login_screen.dart';
+import '../../features/checkout/presentation/screens/checkout.dart';
 import '../../features/home/presentation/screens/category_products.dart';
 import '../../features/home/presentation/screens/details.dart';
 import '../../features/main_layout/presentation/screens/main_layout.dart';
+import '../../features/profile/presentation/screens/orders_history.dart';
 import '../auth_gate/auth_gate.dart';
 
 abstract final class AppRoutes {
@@ -13,6 +16,9 @@ abstract final class AppRoutes {
   static const mainLayout = "/main-layout";
   static const signUp = "/sign-up";
   static const categoryProducts = "/category-products";
+  static const checkout = "/checkout";
+  static const profile = "/profile";
+  static const ordersHistory = "/orders-history";
 
 }
 class AppPages {
@@ -40,6 +46,18 @@ class AppPages {
     GetPage(
       name: AppRoutes.categoryProducts,
       page: () => const CategoryProductsView(),
+    ),
+    GetPage(
+      name: AppRoutes.checkout,
+      page: () => Checkout(),
+    ),
+    GetPage(
+      name: AppRoutes.profile,
+      page: () => Profile(),
+    ),
+    GetPage(
+      name: AppRoutes.ordersHistory,
+      page: () => OrdersHistory(),
     ),
   ];
 }

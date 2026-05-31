@@ -5,4 +5,5 @@ abstract class CartLocalDataSource {
   Future<List<FirestoreProduct>> getLocalCartItems();
   Future<void> updateProductQuantity(int id, int newQuantity);
   Future<void> deleteProduct(int id);
+  Future<void> clearLocalCartAfterCheckout();
 }

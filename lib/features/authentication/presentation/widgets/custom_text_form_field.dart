@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -9,6 +10,8 @@ class CustomTextFormField extends StatefulWidget {
     this.obscureText = false,
     this.validator,
     this.onSaved,
+    this.controller,
+    this.onChanged
   });
 
   final String hint;
@@ -16,7 +19,8 @@ class CustomTextFormField extends StatefulWidget {
   final bool obscureText;
   final String? Function(String?)? validator;
   final void Function(String?)? onSaved;
-
+  final TextEditingController? controller;
+  final void Function(String)? onChanged;
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
 }
@@ -38,6 +42,10 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       onSaved: (value) {
         widget.onSaved?.call(value);
       },
+      onChanged: (value) {
+        widget.onChanged?.call(value);
+      },
+      controller: widget.controller,
       validator: widget.validator,
       obscureText: _hideText,
       style: Theme.of(context).textTheme.bodySmall,

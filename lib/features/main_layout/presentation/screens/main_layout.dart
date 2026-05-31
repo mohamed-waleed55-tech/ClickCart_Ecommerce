@@ -8,7 +8,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 import '../../../../core/assets/svg_icons_manager.dart';
 import '../../../cart/presentation/screens/cart.dart';
-import '../../../profile/presentation/profile.dart';
+import '../../../profile/presentation/screens/profile.dart';
 import '../../../home/presentation/screens/home.dart';
 import '../view_models/control_view_model.dart';
 

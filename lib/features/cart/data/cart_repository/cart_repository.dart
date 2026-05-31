@@ -1,4 +1,6 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../model/firestore_product.dart';
 import '../../model/firestore_result.dart';
 
@@ -11,4 +13,7 @@ abstract class CartRepository {
   Future<FirestoreResult<List<FirestoreProduct>>> getLocalCarts();
   Future<void> updateProductQuantity(int id, int newQuantity);
   Future<void> deleteProduct(int id);
-}
+  void clearRemoteCartBeforeCommit(WriteBatch batch) ;
+  Future<void> clearLocalCartAfterCheckout() ;
+
+  }

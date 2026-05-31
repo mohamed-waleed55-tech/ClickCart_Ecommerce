@@ -95,4 +95,13 @@ class CartLocalDataSourceImp implements CartLocalDataSource {
       throw Exception("Failed to delete product from local storage: $e");
     }
   }
+
+  @override
+  Future<void> clearLocalCartAfterCheckout()async {
+   await _dbHelper.clearLocalCart();
+
+
+  }
+
+
 }
