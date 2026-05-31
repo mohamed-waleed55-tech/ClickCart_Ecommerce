@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:ecommerce_app/features/cart/model/firestore_product.dart';
 import 'package:get/get.dart';
 
@@ -5,6 +6,8 @@ import '../../../home/data/api_error_handling/network_exceptions.dart';
 import '../../../home/model/api_response/product_model.dart';
 import '../../data/cart_repository/cart_repository.dart';
 import 'package:ecommerce_app/features/cart/model/firestore_result.dart';
+
+import '../../data/sync_manager/sync_manager.dart';
 
 class CartViewModel extends GetxController {
   final CartRepository _cartRepository;
@@ -92,9 +95,16 @@ class CartViewModel extends GetxController {
     final index = cartProducts.indexWhere((element) => element.id == product.id);
     if (index != -1) {
       int newQuantity = (cartProducts[index].quantity ?? 1) + 1;
+
+      // 1. Snappy UI: Update the local reactive state immediately
       cartProducts[index] = cartProducts[index]..quantity = newQuantity;
-      cartProducts.refresh();
+      cartProducts.refresh(); // Tells Obx widgets to redraw right now
+
+      // 2. Persist to local database and mark as un-synced (isSynced = 0)
       await _cartRepository.updateCartItemQuantity(product.id!, newQuantity);
+
+      // 3. Sync immediately to Firestore if online
+      _triggerRemoteSyncIfOnline();
     }
   }
 
@@ -104,9 +114,16 @@ class CartViewModel extends GetxController {
       int currentQuantity = cartProducts[index].quantity ?? 1;
       if (currentQuantity > 1) {
         int newQuantity = currentQuantity - 1;
+
+        // 1. Snappy UI Update
         cartProducts[index] = cartProducts[index]..quantity = newQuantity;
         cartProducts.refresh();
+
+        // 2. Persist locally
         await _cartRepository.updateCartItemQuantity(product.id!, newQuantity);
+
+        // 3. Sync if online
+        _triggerRemoteSyncIfOnline();
       } else {
         removeProductFromCart(product);
       }
@@ -114,8 +131,29 @@ class CartViewModel extends GetxController {
   }
 
   void removeProductFromCart(FirestoreProduct product) async {
+    // 1. Instant UI update
     cartProducts.removeWhere((element) => element.id == product.id);
+
+    // 2. Update local database (Delete local row or mark as deleted if tracking offline deletions)
     await _cartRepository.removeProductFromCart(product.id!);
+
+    // 3. Attempt remote removal if online
+    _triggerRemoteSyncIfOnline();
+  }
+
+  void _triggerRemoteSyncIfOnline() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    bool isOnline = connectivityResult.contains(ConnectivityResult.wifi) ||
+        connectivityResult.contains(ConnectivityResult.mobile);
+
+    if (isOnline) {
+      // invoke its synchronization routine immediately.
+      if (Get.isRegistered<CartSyncManager>()) {
+        Get.find<CartSyncManager>().syncLocalCartToFirestore();
+      }
+    }
+    // Note: If offline, we safely do nothing.
+    // The CartSyncManager's listener will catch it the second they get network back.
   }
 
   void addProductToCart(ProductModel product) async {

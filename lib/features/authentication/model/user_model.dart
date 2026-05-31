@@ -8,14 +8,12 @@ class UserModel {
   final String name;
   final String email;
   final String pic;
-  final List<String> cart;
 
   UserModel({
     required this.id,
     required this.name,
     required this.email,
     required this.pic,
-    required this.cart,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);

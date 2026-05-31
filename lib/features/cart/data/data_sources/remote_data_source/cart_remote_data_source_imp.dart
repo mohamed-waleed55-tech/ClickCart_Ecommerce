@@ -22,37 +22,23 @@ class CartRemoteDataSourceImp extends CartRemoteDataSource {
         .doc(_currentUserId)
         .collection('cart')
         .withConverter<FirestoreProduct>(
-      toFirestore: (value, _) => value.toJson(),
-      fromFirestore: (snapshot, _) =>
-          FirestoreProduct.fromJson(snapshot.data()!),
-    );
+          toFirestore: (value, _) => value.toJson(),
+          fromFirestore: (snapshot, _) =>
+              FirestoreProduct.fromJson(snapshot.data()!),
+        );
   }
 
   @override
   Future<void> addToRemoteCart(FirestoreProduct product) async {
-    if (product.id == null) {
-      print("🚨 [Remote Cart Error]: لا يمكن الإضافة لأن الـ ID الخاص بالمنتج null");
-      return;
-    }
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    final syncedProduct = product.copyWith(isSynced: 1);
 
-    final userCartRef = getUserCartRef();
-    final docRef = userCartRef.doc(product.id.toString());
-
-    try {
-      final snapshot = await docRef.get();
-
-      if (snapshot.exists && snapshot.data() != null) {
-        await docRef.update({
-          'quantity': FieldValue.increment(1),
-        });
-        print("✅ تم زيادة كمية المنتج [${product.title}] في السيرفر.");
-      } else {
-        await docRef.set(product);
-        print("✅ تم إضافة منتج جديد [${product.title}] للسيرفر باستخدام الـ Converter.");
-      }
-    } catch (e) {
-      print("🚨 حصل خطأ أثناء الإضافة للـ Firestore: $e");
-    }
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('cart')
+        .doc(product.id as String?)
+        .set(syncedProduct.toJson());
   }
 
   @override
@@ -62,11 +48,18 @@ class CartRemoteDataSourceImp extends CartRemoteDataSource {
   }
 
   @override
-  Future<List<FirestoreProduct>> getRemoteCartItems() {
-    final cartRef = getUserCartRef();
-    return cartRef.get().then((querySnapshot) {
-      return querySnapshot.docs.map((doc) => doc.data()).toList();
-    });
+  Future<List<FirestoreProduct>> getRemoteCartItems() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+
+    final snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('cart')
+        .get();
+
+    return snapshot.docs
+        .map((doc) => FirestoreProduct.fromJson(doc.data()))
+        .toList();
   }
 
   @override
@@ -77,8 +70,19 @@ class CartRemoteDataSourceImp extends CartRemoteDataSource {
       return deleteItemFromRemoteCart(productId);
     }
 
-    return cartRef.doc(productId.toString()).update({
-      'quantity': quantity,
-    });
+    return cartRef.doc(productId.toString()).update({'quantity': quantity});
   }
+  @override
+  Future<void> clearRemoteCartAfterCheckout(WriteBatch batch) async {
+    final cartSnapshot = await _firestore
+        .collection('users')
+        .doc(_currentUserId)
+        .collection('cart')
+        .get();
+
+    for (var doc in cartSnapshot.docs) {
+      batch.delete(doc.reference);
+    }
+  }
+
 }

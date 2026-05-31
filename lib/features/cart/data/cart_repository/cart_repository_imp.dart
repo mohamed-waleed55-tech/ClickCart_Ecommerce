@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 
@@ -21,10 +22,11 @@ class CartRepositoryImp implements CartRepository {
       final localProduct = product.copyWith(isSynced: 0);
 
       await _localDataSource.insertOrUpdateProduct(localProduct);
-      print("✅ تم الحفظ في قاعدة البيانات المحلية بنجاح. الـ SyncManager سيتولى الرفع لاحقاً.");
+      print(
+        "✅ تم الحفظ في قاعدة البيانات المحلية بنجاح. الـ SyncManager سيتولى الرفع لاحقاً.",
+      );
 
       Get.find<CartSyncManager>().syncLocalCartToFirestore();
-
     } catch (e) {
       print("🚨 حصلت مشكلة أثناء الحفظ المحلي: $e");
     }
@@ -38,8 +40,13 @@ class CartRepositoryImp implements CartRepository {
 
   @override
   Future<void> updateCartItemQuantity(int productId, int newQuantity) async {
-    await _remoteDataSource.updateRemoteQuantity(productId, newQuantity);
-    return await _localDataSource.updateProductQuantity(productId, newQuantity);
+    await _localDataSource.updateProductQuantity(productId, newQuantity);
+
+    try {
+      await _remoteDataSource.updateRemoteQuantity(productId, newQuantity);
+    } catch (error) {
+      throw Exception("Failed to sync with server. Reverting changes.");
+    }
   }
 
   @override
@@ -58,8 +65,9 @@ class CartRepositoryImp implements CartRepository {
   }
 
   @override
-  Future<void> insertOrUpdateProduct(FirestoreProduct product) async {
-    await _localDataSource.insertOrUpdateProduct(product);
+  Future<void> insertOrUpdateProduct(FirestoreProduct remoteProduct) async {
+    remoteProduct = remoteProduct.copyWith(isSynced: 1);
+    await _localDataSource.insertOrUpdateProduct(remoteProduct);
   }
 
   @override
@@ -75,5 +83,16 @@ class CartRepositoryImp implements CartRepository {
     } catch (e) {
       return FirestoreResult.failure(NetworkExceptions.getDioException(e));
     }
+  }
+
+
+  @override
+  void clearRemoteCartBeforeCommit(WriteBatch batch) {
+    _remoteDataSource.clearRemoteCartAfterCheckout(batch);
+  }
+
+  @override
+  Future<void> clearLocalCartAfterCheckout() async {
+    await _localDataSource.clearLocalCartAfterCheckout();
   }
 }

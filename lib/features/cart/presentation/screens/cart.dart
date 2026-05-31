@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../../core/assets/images_manager.dart';
+import '../../../../core/navigation/app_routes.dart';
 import '../view_models/cart_view_model.dart';
 import '../widgets/cart_item.dart';
 
@@ -18,8 +20,8 @@ class Cart extends GetView<CartViewModel> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-            "Cart",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)
+          "Cart",
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
@@ -29,7 +31,14 @@ class Cart extends GetView<CartViewModel> {
         children: [
           Obx(() {
             if (controller.cartProducts.isEmpty) {
-              return const Center(child: Text("Your cart is empty"));
+              return Center(
+                child: SizedBox(
+                  height: 200.h,
+                  width: 200.w,
+
+                  child: Image(image: AssetImage(ImagesManager.emptyCart)),
+                ),
+              );
             }
             return ListView.separated(
               padding: EdgeInsets.only(bottom: 160.h, left: 20.w, right: 20.w),
@@ -43,38 +52,47 @@ class Cart extends GetView<CartViewModel> {
             );
           }),
 
-          Obx(() => AnimatedPositioned(
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.fastOutSlowIn,
-            bottom: isCheckoutVisible.value ? 85.h : -130.h,
-            left: 20.w,
-            right: 20.w,
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 300),
-              opacity: isCheckoutVisible.value ? 1.0 : 0.0,
-              child: _buildCheckoutBottomBar(context),
-            ),
-          )),
-
-          Obx(() => AnimatedPositioned(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-            bottom: isCheckoutVisible.value ? -70.h : 95.h,
-            right: 20.w,
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 250),
-              opacity: isCheckoutVisible.value ? 0.0 : 1.0,
-              child: FloatingActionButton(
-                onPressed: () {
-                  isCheckoutVisible.value = true;
-                },
-                backgroundColor: const Color(0xFF388E3C),
-                elevation: 6,
-                shape: const CircleBorder(),
-                child: SvgPicture.asset(SvgIconsManager.cart, color: Colors.white, width: 24.w, height: 24.h)
+          Obx(
+            () => AnimatedPositioned(
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.fastOutSlowIn,
+              bottom: isCheckoutVisible.value ? 85.h : -130.h,
+              left: 20.w,
+              right: 20.w,
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 300),
+                opacity: isCheckoutVisible.value ? 1.0 : 0.0,
+                child: _buildCheckoutBottomBar(context),
               ),
             ),
-          )),
+          ),
+
+          Obx(
+            () => AnimatedPositioned(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+              bottom: isCheckoutVisible.value ? -70.h : 95.h,
+              right: 20.w,
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 250),
+                opacity: isCheckoutVisible.value ? 0.0 : 1.0,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    isCheckoutVisible.value = true;
+                  },
+                  backgroundColor: const Color(0xFF388E3C),
+                  elevation: 6,
+                  shape: const CircleBorder(),
+                  child: SvgPicture.asset(
+                    SvgIconsManager.cart,
+                    color: Colors.white,
+                    width: 24.w,
+                    height: 24.h,
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -91,7 +109,7 @@ class Cart extends GetView<CartViewModel> {
             color: Colors.black.withOpacity(0.08),
             blurRadius: 15,
             offset: const Offset(0, -4),
-          )
+          ),
         ],
       ),
       child: Row(
@@ -104,17 +122,23 @@ class Cart extends GetView<CartViewModel> {
               children: [
                 Text(
                   "TOTAL",
-                  style: TextStyle(color: Colors.grey, fontSize: 11.sp, letterSpacing: 1.2),
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 11.sp,
+                    letterSpacing: 1.2,
+                  ),
                 ),
                 SizedBox(height: 4.h),
-                Obx(() => Text(
-                  "\$${controller.totalPrice.value.toStringAsFixed(3)}",
-                  style: const TextStyle(
-                    color: Color(0xFF388E3C),
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                Obx(
+                  () => Text(
+                    "\$${controller.totalPrice.value.toStringAsFixed(3)}",
+                    style: const TextStyle(
+                      color: Color(0xFF388E3C),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                )),
+                ),
               ],
             ),
           ),
@@ -125,7 +149,7 @@ class Cart extends GetView<CartViewModel> {
               height: 48.h,
               child: ElevatedButton(
                 onPressed: () {
-                  // Checkout Logic
+                  Get.toNamed(AppRoutes.checkout);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF388E3C),
@@ -137,9 +161,10 @@ class Cart extends GetView<CartViewModel> {
                 child: Text(
                   "CHECKOUT",
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.bold),
+                    color: Colors.white,
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -158,11 +183,7 @@ class Cart extends GetView<CartViewModel> {
                 color: Color(0xFF388E3C),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
-                Icons.close,
-                color: Colors.white,
-                size: 20,
-              ),
+              child: const Icon(Icons.close, color: Colors.white, size: 20),
             ),
           ),
         ],

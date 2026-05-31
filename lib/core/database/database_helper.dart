@@ -65,4 +65,9 @@ class DatabaseHelper {
       whereArgs: [productId],
     );
   }
+  Future<void> clearLocalCart() async {
+    final db = await database;
+    await db.delete('local_cart');
+  }
 }
+

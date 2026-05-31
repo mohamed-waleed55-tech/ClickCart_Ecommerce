@@ -26,15 +26,18 @@ class HomeViewModel extends GetxController {
 
 
   HomeViewModel( this._productsRepository);
-
   @override
   void onInit() {
     super.onInit();
-    fetchCategories();
-    getProducts();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      fetchCategories();
+      getProducts();
+    });
     searchController.addListener(() {
       currentSearchQuery.value = searchController.text;
     });
+
   }
 
 

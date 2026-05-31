@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../data/auth_repository/auth_repositroy.dart';
 import '../../data/user_repository/user_repositroy.dart';
@@ -91,7 +90,6 @@ class AuthViewModel extends GetxController {
       name: resolvedName,
       email: user.email ?? '',
       pic: user.photoURL ?? '',
-      cart: [],
     );
 
     userRepo.saveUser(userModel);

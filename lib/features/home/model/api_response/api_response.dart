@@ -16,3 +16,5 @@ class ApiResponse {
 
   Map<String, dynamic> toJson() => _$ApiResponseToJson(this);
 }
+
+ApiResponse deserializeApiResponse(Map<String, dynamic> json) => ApiResponse.fromJson(json);
