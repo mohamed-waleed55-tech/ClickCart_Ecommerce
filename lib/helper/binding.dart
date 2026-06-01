@@ -46,6 +46,7 @@ class AppBinding extends Bindings {
     Get.lazyPut<ProductsApi>(() => ProductsApi(Get.find<Dio>()));
 
     //  REPOSITORIES
+    Get.lazyPut<UserRepository>(() => UserFirestoreRepository(Get.find<FirebaseFirestore>(),), fenix: true);
     Get.lazyPut<ProductsRepository>(() => ProductsRepositoryImp(Get.find<ProductsApi>()));
     Get.lazyPut<CategoryRepository>(() => CategoryRepositoryImp());
     Get.lazyPut<UserRepository>(() => UserFirestoreRepository(Get.find<FirebaseFirestore>()));
@@ -58,6 +59,7 @@ class AppBinding extends Bindings {
           () => FirebaseAuthRepository(FirebaseAuth.instance, GoogleSignIn()),
       fenix: true,
     );
+    Get.lazyPut<ProfileRepo>(() => ProfileRepoImp(Get.find<FirebaseFirestore>(), auth: FirebaseAuth.instance));
 
     // BACKGROUND SERVICES
     Get.putAsync<CartSyncManager>(() async {
@@ -68,9 +70,9 @@ class AppBinding extends Bindings {
     }, permanent: true);
 
    // VIEW MODELS
-    Get.lazyPut<ControlViewModel>(() => ControlViewModel());
-    Get.lazyPut<AuthViewModel>(() => AuthViewModel(Get.find<AuthRepository>(), Get.find<UserRepository>()));
-    Get.lazyPut<HomeViewModel>(() => HomeViewModel(Get.find<ProductsRepository>()));
+    Get.lazyPut<ControlViewModel>(() => ControlViewModel(), fenix: true);
+    Get.lazyPut<AuthViewModel>(() => AuthViewModel(Get.find<AuthRepository>(), Get.find<UserRepository>()), fenix: true);
+    Get.lazyPut<HomeViewModel>(() => HomeViewModel(Get.find<ProductsRepository>()), fenix: true);
     Get.lazyPut<CategoryProductsViewModel>(() => CategoryProductsViewModel(Get.find<ProductsRepository>()), fenix: true);
     Get.lazyPut<CartViewModel>(() => CartViewModel(Get.find<CartRepository>()), fenix: true);
     Get.lazyPut<CheckoutViewModel>(() => CheckoutViewModel(Get.find<CartRepository>(), Get.find<OrdersRemoteDataSourceImp>()), fenix: true);
