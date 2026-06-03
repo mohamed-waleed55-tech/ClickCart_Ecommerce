@@ -57,6 +57,8 @@ dependencies:
   dots_indicator: ^4.0.1
   im_stepper: ^0.1.2+3
   intl: ^0.20.2
+  webview_flutter: ^4.8.0
+
 
 
 

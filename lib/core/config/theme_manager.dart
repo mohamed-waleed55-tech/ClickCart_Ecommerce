@@ -18,7 +18,6 @@ class ThemeManager {
     colorScheme: _colorScheme,
     scaffoldBackgroundColor: _colorScheme.surface,
 
-    // 2. تحسين نصوص التطبيق
     textTheme: TextTheme(
       displayLarge: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.bold, color: _colorScheme.onSurface),
       titleLarge: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold, color: _colorScheme.onSurface),
@@ -40,7 +39,6 @@ class ThemeManager {
       ),
     ),
 
-    // 4. ثيم الأزرار
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: _colorScheme.primary,
