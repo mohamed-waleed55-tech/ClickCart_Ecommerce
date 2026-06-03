@@ -1,4 +1,3 @@
-import 'package:ecommerce_app/features/profile/presentation/screens/profile.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
 import '../../features/authentication/presentation/screens/login_screen.dart';
@@ -8,6 +7,7 @@ import '../../features/home/presentation/screens/details.dart';
 import '../../features/main_layout/presentation/screens/main_layout.dart';
 import '../../features/onboarding/presentation/screens/onboaeding_view.dart';
 import '../../features/profile/presentation/screens/orders_history.dart';
+import '../../features/profile/presentation/screens/profile.dart';
 import '../auth_gate/auth_gate.dart';
 
 abstract final class AppRoutes {
