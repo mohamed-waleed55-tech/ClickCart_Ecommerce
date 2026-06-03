@@ -8,14 +8,22 @@ class UserModel {
   final String name;
   final String email;
   final String pic;
+  final String phoneNumber;
+  final String fName;
+  final String lName;
 
   UserModel({
     required this.id,
     required this.name,
     required this.email,
     required this.pic,
+    required this.phoneNumber,
+    required this.fName,
+    required this.lName,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
+
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 }

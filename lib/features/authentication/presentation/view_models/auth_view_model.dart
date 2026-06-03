@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -14,7 +15,11 @@ class AuthViewModel extends GetxController {
   String email = '';
   String password = '';
   String name = '';
+  String phoneNumber = '';
+  String fName = '';
+  String lName = '';
   RxBool isLoading = false.obs;
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   Rxn<User> firebaseUser = Rxn<User>();
 
@@ -90,6 +95,9 @@ class AuthViewModel extends GetxController {
       name: resolvedName,
       email: user.email ?? '',
       pic: user.photoURL ?? '',
+      phoneNumber: phoneNumber,
+      fName: fName,
+      lName: lName,
     );
 
     userRepo.saveUser(userModel);
