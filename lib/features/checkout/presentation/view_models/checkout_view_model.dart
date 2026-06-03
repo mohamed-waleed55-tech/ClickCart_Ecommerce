@@ -5,14 +5,16 @@ import '../../../../core/navigation/app_routes.dart';
 import '../../../cart/data/cart_repository/cart_repository.dart';
 import '../../../cart/model/firestore_result.dart';
 import '../../../home/data/api_error_handling/network_exceptions.dart';
+import '../../../payment/presentation/view_models/payment_view_model.dart';
 import '../../data/data_source/order_remote_data_source_imp.dart';
 import '../widgets/address.dart';
 import '../widgets/delivery.dart';
+import '../widgets/payment_method.dart';
 import '../widgets/summary.dart';
 
 class CheckoutViewModel extends GetxController {
   final CartRepository _cartRepository;
-  final OrdersRemoteDataSourceImp _ordersRemoteDataSource ;
+  final OrdersRemoteDataSourceImp _ordersRemoteDataSource;
 
   CheckoutViewModel(this._cartRepository, this._ordersRemoteDataSource);
 
@@ -28,6 +30,11 @@ class CheckoutViewModel extends GetxController {
   var selectedDeliveryOption = 0.obs;
   var errorMessage = ''.obs;
   var billingSameAsDelivery = true.obs;
+  var selectedPaymentMethod = 'card'.obs;
+  bool get isCard => selectedPaymentMethod.value == 'card';
+
+  // 1. متغير جديد لتتبع وسيلة الدفع المختارة (card أو kiosk)
+
   RxList<FirestoreProduct> cartProducts = <FirestoreProduct>[].obs;
 
   TextEditingController street1Controller = TextEditingController();
@@ -39,10 +46,12 @@ class CheckoutViewModel extends GetxController {
   bool get isLastStep => activeStep.value == checkoutScreens.length - 1;
   bool get isFirstStep => activeStep.value == 0;
 
-  final List<Widget> checkoutScreens = [
+  // 2. تحديث قائمة الشاشات لتشمل خطوة الدفع كخطوة رابعة وأخيرة
+  List<Widget> get checkoutScreens => [
     const DeliveryWidget(),
     const AddressWidget(),
     const SummaryWidget(),
+    const PaymentMethod(), // شاشة الدفع الجديدة
   ];
 
   void calculateTotalPrice() {
@@ -66,22 +75,45 @@ class CheckoutViewModel extends GetxController {
     if (activeStep.value > 0) activeStep.value--;
   }
 
+  // 3. تعديل ميثود الـ nextStep للتعامل مع الخطوة الأخيرة الجديدة
   void nextStep() {
     if (!isLastStep) {
       activeStep.value++;
     } else {
-      placeOrderAndClearCart();
+      // إذا كان في خطوة الدفع وضغط على "Pay Now"
+      startPaymentProcess();
     }
   }
 
-  Future<void> placeOrderAndClearCart() async {
+  // 4. دالة بدء الدفع للربط مع Paymob Controller
+  void startPaymentProcess() {
     if (cartProducts.isEmpty) {
       Get.snackbar('Error', 'Your cart is empty');
       return;
     }
 
-    isSubmitting.value = true;
+    // جلب الـ PaymentController المسجل في التطبيق
+    final paymentController = Get.find<PaymentController>();
 
+    // تحويل إجمالي المبلغ إلى قروش (Cents) المطلوبة من Paymob (مثال: 100.5 جنيه تضرب في 100 لتصبح 10050 قرش)
+    int amountInCents = (totalPrice.value * 100).toInt();
+    bool isCard = selectedPaymentMethod.value == 'card';
+
+    // استدعاء فلو الدفع الذي قمنا بضبطه مسبقاً
+    paymentController.startPaymentFlow(
+      amountCents: amountInCents.toString(),
+      isCardPayment: isCard,
+    ).then((_) {
+      // ملاحظة: يمكنك استدعاء [placeOrderAndClearCart] فوراً هنا إذا كان العميل اختار كشك (Kiosk)
+      // وحصل على الرقم المرجعي بنجاح لحفظ الطلب بوضع "Pending" في الفايرستور.
+      // أما في حالة الفيزا، يفضل حفظ الطلب بعد نجاح الدفع عبر الـ Webhook الخاص بـ Paymob
+      // أو استدعائها هنا مباشرة حسب منطق عمل تطبيقك.
+    });
+  }
+
+  // الدالة الحالية الخاصة بك لرفع البيانات للفايرستور (تبقى كما هي لاستخدامها عند تأكيد الدفع)
+  Future<void> placeOrderAndClearCart() async {
+    isSubmitting.value = true;
 
     final orderData = {
       'orderId': 'ORD-${DateTime.now().millisecondsSinceEpoch}',
@@ -89,6 +121,7 @@ class CheckoutViewModel extends GetxController {
       'status': 'Pending',
       'totalAmount': totalPrice.value,
       'deliveryOption': selectedDeliveryOption.value,
+      'paymentMethod': selectedPaymentMethod.value, // حفظ طريقة الدفع في الأوردر
       'shippingAddress': {
         'street1': street1Controller.text.trim(),
         'city': cityController.text.trim(),
@@ -98,8 +131,8 @@ class CheckoutViewModel extends GetxController {
 
     try {
       await _ordersRemoteDataSource.processCheckout(
-        orderData: orderData,
-        products: cartProducts,
+          orderData: orderData,
+          products: cartProducts,
           clearCartCallback: (batch) {
             _cartRepository.clearRemoteCartBeforeCommit(batch);
           }
@@ -125,7 +158,6 @@ class CheckoutViewModel extends GetxController {
       isSubmitting.value = false;
     }
   }
-
   Future<void> getLocalCarts() async {
     final result = await _cartRepository.getLocalCarts();
     result.when(
