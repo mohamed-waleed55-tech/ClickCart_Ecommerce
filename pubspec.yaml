@@ -37,8 +37,6 @@ dependencies:
   get: ^4.7.3
   flutter_screenutil: ^5.9.3
   google_sign_in: ^6.2.0
-  firebase_core: ^4.5.0
-  firebase_auth: ^6.4.0
   cloud_firestore: ^6.3.0
   flutter_svg: ^2.2.4
   retrofit: ^4.9.0
@@ -56,6 +54,10 @@ dependencies:
   im_stepper: ^0.1.2+3
   intl: ^0.20.2
   webview_flutter: ^4.8.0
+  firebase_core: ^4.5.0
+  firebase_auth: any
+  firebase_analytics: any
+  firebase_crashlytics: any
 
 
 
