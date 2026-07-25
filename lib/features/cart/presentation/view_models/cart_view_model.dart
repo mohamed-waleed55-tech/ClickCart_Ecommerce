@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import '../../../home/data/api_error_handling/network_exceptions.dart';
 import '../../../home/model/api_response/product_model.dart';
 import '../../data/cart_repository/cart_repository.dart';
-import 'package:ecommerce_app/features/cart/model/firestore_result.dart';
 
 import '../../data/sync_manager/sync_manager.dart';
 
