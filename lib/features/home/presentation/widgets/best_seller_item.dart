@@ -21,21 +21,20 @@ class BestSellerItem extends StatelessWidget {
       onTap: () => Get.toNamed(AppRoutes.productDetails, arguments: item),
       child: Container(
         width: width,
-        padding: REdgeInsets.all(8), // زيادة البادينج قليلاً لجمال التصميم
+        padding: REdgeInsets.all(8), 
         decoration: BoxDecoration(
           color: colorScheme.surface,
           borderRadius: BorderRadius.circular(22.r),
-          // إضافة ظل خفيف يجعل الكارت يبدو احترافياً (اختياري)
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withValues(alpha: 0.03),
               blurRadius: 10,
               offset: const Offset(0, 5),
             ),
           ],
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // جعل المحاذاة لليسار أجمل للمتاجر
+          crossAxisAlignment: CrossAxisAlignment.start, 
           children: [
             Expanded(
               child: Container(
@@ -71,7 +70,7 @@ class BestSellerItem extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: colorScheme.onSurface.withOpacity(0.6),
+                color: colorScheme.onSurface.withValues(alpha: 0.6),
               ),
             ),
 

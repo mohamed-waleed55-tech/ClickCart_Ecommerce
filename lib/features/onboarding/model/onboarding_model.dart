@@ -1,4 +1,3 @@
-// Location: lib/data/models/onboarding_model.dart
 
 import '../../../core/assets/images_manager.dart';
 

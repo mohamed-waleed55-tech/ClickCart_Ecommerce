@@ -22,7 +22,7 @@ class CartItemWidget extends GetView<CartViewModel> {
         alignment: Alignment.centerRight,
         padding: EdgeInsets.only(right: 20.w),
         decoration: BoxDecoration(
-          color: Colors.redAccent.withOpacity(0.9),
+          color: Colors.redAccent.withValues(alpha: 0.9),
           borderRadius: BorderRadius.circular(12.r),
         ),
         child: const Icon(Icons.delete_outline, color: Colors.white, size: 30),
@@ -33,7 +33,7 @@ class CartItemWidget extends GetView<CartViewModel> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
-            BoxShadow(color: Colors.grey.withOpacity(0.4), blurRadius: 5, offset: const Offset(0, 2))
+            BoxShadow(color: Colors.grey.withValues(alpha: 0.4), blurRadius: 5, offset: const Offset(0, 2))
           ],
         ),
         child: Row(

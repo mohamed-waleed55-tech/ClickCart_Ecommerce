@@ -70,7 +70,7 @@ class PaymentMethod extends GetView<CheckoutViewModel> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(isSelected ? 0.05 : 0.01),
+              color: Colors.black.withValues(alpha: isSelected ? 0.05 : 0.01),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -82,7 +82,7 @@ class PaymentMethod extends GetView<CheckoutViewModel> {
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? const Color(0xFF388E3C).withOpacity(0.1)
+                    ? const Color(0xFF388E3C).withValues(alpha: 0.1)
                     : Colors.grey.shade100,
                 shape: BoxShape.circle,
               ),

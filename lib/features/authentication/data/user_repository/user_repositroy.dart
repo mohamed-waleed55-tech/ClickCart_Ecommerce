@@ -1,8 +1,7 @@
-import '../../../cart/model/firestore_product.dart';
-import '../../../home/data/products_repository/api_result.dart';
-import '../../../home/model/api_response/product_model.dart';
+import 'package:ecommerce_app/core/error_handling/result_state.dart';
 import '../../model/user_model.dart';
 
 abstract class UserRepository {
-  Future<void> saveUser(UserModel user);
+  Future<ResultState<void>> saveUser(UserModel user);
+
 }

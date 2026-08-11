@@ -1,3 +1,5 @@
+import 'package:ecommerce_app/features/ai_shopping/presentation/screen/ai_chat_screen.dart';
+import 'package:ecommerce_app/features/profile/presentation/screens/edit_profile_screen.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
 import '../../features/authentication/presentation/screens/login_screen.dart';
@@ -21,6 +23,8 @@ abstract final class AppRoutes {
   static const profile = "/profile";
   static const ordersHistory = "/orders-history";
   static const onboarding = "/onboarding";
+  static const aiChat = "/ai-chat";
+  static const editProfile = "/edit-profile";
 
 }
 class AppPages {
@@ -64,6 +68,14 @@ class AppPages {
     GetPage(
       name: AppRoutes.onboarding,
       page: () => const Onboarding(),
+    ),
+    GetPage(
+      name: AppRoutes.aiChat,
+      page: () => const AiChatScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.editProfile,
+      page: () => const EditProfileScreen(),
     ),
   ];
 }

@@ -46,12 +46,11 @@ class CheckoutViewModel extends GetxController {
   bool get isLastStep => activeStep.value == checkoutScreens.length - 1;
   bool get isFirstStep => activeStep.value == 0;
 
-  // 2. تحديث قائمة الشاشات لتشمل خطوة الدفع كخطوة رابعة وأخيرة
   List<Widget> get checkoutScreens => [
     const DeliveryWidget(),
     const AddressWidget(),
     const SummaryWidget(),
-    const PaymentMethod(), // شاشة الدفع الجديدة
+    const PaymentMethod(), 
   ];
 
   void calculateTotalPrice() {
@@ -74,44 +73,33 @@ class CheckoutViewModel extends GetxController {
   void previousStep() {
     if (activeStep.value > 0) activeStep.value--;
   }
-
-  // 3. تعديل ميثود الـ nextStep للتعامل مع الخطوة الأخيرة الجديدة
   void nextStep() {
     if (!isLastStep) {
       activeStep.value++;
     } else {
-      // إذا كان في خطوة الدفع وضغط على "Pay Now"
       startPaymentProcess();
     }
   }
 
-  // 4. دالة بدء الدفع للربط مع Paymob Controller
   void startPaymentProcess() {
     if (cartProducts.isEmpty) {
       Get.snackbar('Error', 'Your cart is empty');
       return;
     }
 
-    // جلب الـ PaymentController المسجل في التطبيق
     final paymentController = Get.find<PaymentController>();
 
-    // تحويل إجمالي المبلغ إلى قروش (Cents) المطلوبة من Paymob (مثال: 100.5 جنيه تضرب في 100 لتصبح 10050 قرش)
     int amountInCents = (totalPrice.value * 100).toInt();
     bool isCard = selectedPaymentMethod.value == 'card';
 
-    // استدعاء فلو الدفع الذي قمنا بضبطه مسبقاً
     paymentController.startPaymentFlow(
       amountCents: amountInCents.toString(),
       isCardPayment: isCard,
     ).then((_) {
-      // ملاحظة: يمكنك استدعاء [placeOrderAndClearCart] فوراً هنا إذا كان العميل اختار كشك (Kiosk)
-      // وحصل على الرقم المرجعي بنجاح لحفظ الطلب بوضع "Pending" في الفايرستور.
-      // أما في حالة الفيزا، يفضل حفظ الطلب بعد نجاح الدفع عبر الـ Webhook الخاص بـ Paymob
-      // أو استدعائها هنا مباشرة حسب منطق عمل تطبيقك.
+      
     });
   }
 
-  // الدالة الحالية الخاصة بك لرفع البيانات للفايرستور (تبقى كما هي لاستخدامها عند تأكيد الدفع)
   Future<void> placeOrderAndClearCart() async {
     isSubmitting.value = true;
 

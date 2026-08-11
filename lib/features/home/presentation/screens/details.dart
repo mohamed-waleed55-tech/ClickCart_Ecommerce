@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/features/home/presentation/widgets/products_image_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -20,23 +21,26 @@ class ProductDetails extends GetView<CartViewModel> {
           CustomScrollView(
             physics: const BouncingScrollPhysics(),
             slivers: [
-              SliverAppBar(
-                expandedHeight: 380.h,
-                backgroundColor: Colors.white,
-                elevation: 0,
-                pinned: true,
-                automaticallyImplyLeading: false,
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Container(
-                    color: Colors.white,
-                    padding: REdgeInsets.all(40),
-                    child: Image.network(
-                      product.thumbnail ?? "",
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
+             SliverAppBar(
+           expandedHeight: 380.h,
+         backgroundColor: Colors.white,
+        pinned: true,
+  automaticallyImplyLeading: false,
+          flexibleSpace: FlexibleSpaceBar(
+                background: Container(
+             color: Colors.white,
+             child: (product.images != null && product.images!.isNotEmpty)
+          ? ProductImageSlider(images: product.images!) 
+          : Container(
+              padding: REdgeInsets.all(40),
+              child: Image.network(
+                product.thumbnail ?? "",
+                fit: BoxFit.contain,
               ),
+            ),
+    ),
+  ),
+),
               SliverToBoxAdapter(
                 child: Container(
                   decoration: BoxDecoration(

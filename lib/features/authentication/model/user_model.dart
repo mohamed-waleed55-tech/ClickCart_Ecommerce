@@ -26,4 +26,23 @@ class UserModel {
       _$UserModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
+  UserModel copyWith({
+    String? id,
+    String? name,
+    String? email,
+    String? pic,
+    String? phoneNumber,
+    String? fName,
+    String? lName,
+  }) {
+    return UserModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      pic: pic ?? this.pic,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      fName: fName ?? this.fName,
+      lName: lName ?? this.lName,
+    );
+  }
 }

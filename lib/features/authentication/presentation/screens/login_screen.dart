@@ -16,146 +16,300 @@ class LoginScreen extends GetWidget<AuthViewModel> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
+
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
+
       body: Stack(
         children: [
           const WaveBackground(),
 
           SafeArea(
             child: SingleChildScrollView(
-              padding: REdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 20.h),
+              padding: REdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ),
 
-                    Row(
-                      children: [
-                        Text(
-                          'Welcome,',
-                          style: theme.textTheme.titleLarge?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const Spacer(),
-                        TextButton(
-                          onPressed: () => Get.to(() => const SignUp()),
-                          child: Text(
-                            'Sign Up',
-                            style: theme.textTheme.titleSmall?.copyWith(
+              child: Form(
+                key: controller.loginFormKey,
+
+                child: TweenAnimationBuilder<double>(
+                  tween: Tween<double>(
+                    begin: 0.0,
+                    end: 1.0,
+                  ),
+
+                  duration: const Duration(
+                    milliseconds: 600,
+                  ),
+
+                  curve: Curves.easeOutCubic,
+
+                  builder: (
+                    context,
+                    value,
+                    child,
+                  ) {
+                    return Transform.translate(
+                      offset: Offset(
+                        0,
+                        30 * (1 - value),
+                      ),
+
+                      child: Opacity(
+                        opacity: value,
+                        child: child,
+                      ),
+                    );
+                  },
+
+                  child: Column(
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start,
+
+                    children: [
+                      SizedBox(height: 20.h),
+
+
+                      Row(
+                        children: [
+                          Text(
+                            'Welcome,',
+                            style: theme.textTheme.titleLarge?.copyWith(
                               color: Colors.white,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          const Spacer(),
+
+                          TextButton(
+                            onPressed: () {
+                              Get.to(
+                                () => const SignUp(),
+
+                                transition:
+                                    Transition.rightToLeftWithFade,
+
+                                duration: const Duration(
+                                  milliseconds: 350,
+                                ),
+
+                                curve: Curves.easeOutCubic,
+                              );
+                            },
+
+                            child: Text(
+                              'Sign Up',
+
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                   
+
+                      Text(
+                        'Sign in to continue',
+
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          color: Colors.white.withAlpha(200),
+                        ),
+                      ),
+
+                      SizedBox(height: 80.h),
+
+
+                      CustomTextFormField(
+                        hint: 'Enter your email',
+
+                        prefixIcon: Icons.email_outlined,
+
+                        onSaved: (value) {
+                          controller.email =
+                              value?.trim() ?? '';
+                        },
+
+                        validator: AppValidators.email,
+                      ),
+
+                      SizedBox(height: 16.h),
+
+                  
+
+                      CustomTextFormField(
+                        hint: 'Enter your password',
+
+                        obscureText: true,
+
+                        prefixIcon:
+                            Icons.lock_outline_rounded,
+
+                        onSaved: (value) {
+                          controller.password =
+                              value ?? '';
+                        },
+
+                        validator:
+                            AppValidators.loginPassword,
+                      ),
+
+                   
+
+                      Align(
+                        alignment: Alignment.centerRight,
+
+                        child: TextButton(
+                          onPressed: () {},
+
+                          child: Text(
+                            'Forgot Password?',
+
+                            style:
+                                theme.textTheme.titleSmall?.copyWith(
+                              color:
+                                  theme.colorScheme.primary,
+
+                              fontWeight:
+                                  FontWeight.w700,
                             ),
                           ),
                         ),
-                      ],
-                    ),
-
-                    Text(
-                      'Sign in to continue',
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        color: Colors.white.withAlpha(200),
                       ),
-                    ),
 
-                    SizedBox(height: 80.h),
+                      SizedBox(height: 16.h),
 
-                    CustomTextFormField(
-                      hint: 'Enter your email',
-                      prefixIcon: Icons.email_outlined,
-                      onSaved: (value) => controller.email = value!.trim(),
-                      validator: AppValidators.email,
-                    ),
+                 
 
-                    SizedBox(height: 16.h),
+                      Obx(
+                        () => SizedBox(
+                          width: double.infinity,
+                          height: 50.h,
 
-                    CustomTextFormField(
-                      hint: 'Enter your password',
-                      obscureText: true,
-                      prefixIcon: Icons.lock_outline_rounded,
-                      onSaved: (value) => controller.password = value!,
-                      validator: AppValidators.loginPassword,
-                    ),
+                          child: ElevatedButton(
+                            onPressed:
+                                controller.isLoading.value
+                                    ? null
+                                    : () {
+                                        controller
+                                            .loginWithEmailAndPassword();
+                                      },
 
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Forgot Password?',
-                          style: theme.textTheme.titleSmall?.copyWith(
-                            color: theme.colorScheme.primary,
-                            fontWeight: FontWeight.w700,
+                            child:
+                                controller.isLoading.value
+                                    ? SizedBox(
+                                        height: 24.h,
+                                        width: 24.h,
+
+                                        child:
+                                            CircularProgressIndicator(
+                                          strokeWidth: 2.w,
+
+                                          color: theme
+                                              .colorScheme
+                                              .onPrimary,
+                                        ),
+                                      )
+
+                                    : Text(
+                                        'Sign In',
+
+                                        style: theme
+                                            .textTheme
+                                            .titleSmall
+                                            ?.copyWith(
+                                          color: theme
+                                              .colorScheme
+                                              .onPrimary,
+
+                                          fontWeight:
+                                              FontWeight.bold,
+                                        ),
+                                      ),
                           ),
                         ),
                       ),
-                    ),
 
-                    SizedBox(height: 16.h),
+                      SizedBox(height: 30.h),
 
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50.h,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (formKey.currentState?.validate() ?? false) {
-                            formKey.currentState!.save();
-                            controller.loginWithEmailAndPassword();
-                          }
-                        },
-                        child: Text(
-                          'Sign In',
-                          style: theme.textTheme.titleSmall?.copyWith(
-                            color: theme.colorScheme.onPrimary,
-                            fontWeight: FontWeight.bold,
+                    
+
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Divider(
+                              color: theme.dividerColor,
+                            ),
+                          ),
+
+                          Padding(
+                            padding:
+                                REdgeInsets.symmetric(
+                              horizontal: 10,
+                            ),
+
+                            child: Text(
+                              'OR',
+
+                              style:
+                                  theme.textTheme.bodySmall,
+                            ),
+                          ),
+
+                          Expanded(
+                            child: Divider(
+                              color: theme.dividerColor,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(height: 30.h),
+
+                 
+
+                      LoginWithProviders(
+                        text: 'Sign in with Facebook',
+
+                        image: ImagesManager.facebook,
+
+                        onTap: () {},
+                      ),
+
+                      SizedBox(height: 20.h),
+
+                  
+
+                      Obx(
+                        () => IgnorePointer(
+                          ignoring:
+                              controller.isLoading.value,
+
+                          child: LoginWithProviders(
+                            text: 'Sign in with Google',
+
+                            image: ImagesManager.google,
+
+                            onTap: () {
+                              controller
+                               .signInWithGoogle();
+                            },
                           ),
                         ),
                       ),
-                    ),
-
-                    SizedBox(height: 30.h),
-
-                    Row(
-                      children: [
-                        Expanded(child: Divider(color: theme.dividerColor)),
-                        Padding(
-                          padding: REdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                            'OR',
-                            style: theme.textTheme.bodySmall,
-                          ),
-                        ),
-                        Expanded(child: Divider(color: theme.dividerColor)),
-                      ],
-                    ),
-
-                    SizedBox(height: 30.h),
-
-                    LoginWithProviders(
-                      text: 'Sign in with Facebook',
-                      image: ImagesManager.facebook,
-                      onTap: () {},
-                    ),
-
-                    SizedBox(height: 20.h),
-
-                    LoginWithProviders(
-                      text: 'Sign in with Google',
-                      image: ImagesManager.google,
-                      onTap: () => controller.signInWithGoogle(),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

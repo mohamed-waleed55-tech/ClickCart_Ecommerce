@@ -1,13 +1,12 @@
+import 'package:ecommerce_app/core/error_handling/network_exceptions.dart';
 import 'package:ecommerce_app/features/home/data/products_repository/api_result.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../cart/data/cart_repository/cart_repository.dart';
-import '../../../cart/model/firestore_product.dart';
-import '../../data/api_error_handling/network_exceptions.dart';
 import '../../data/products_repository/products_repository.dart';
 import '../../model/api_response/product_model.dart';
 import '../../model/categorey/category_model.dart';
+
 class HomeViewModel extends GetxController {
   final ProductsRepository _productsRepository;
 
@@ -22,10 +21,8 @@ class HomeViewModel extends GetxController {
   final searchController = TextEditingController();
   RxString currentSearchQuery = "".obs;
 
-
-
-
-  HomeViewModel( this._productsRepository);
+  HomeViewModel(this._productsRepository);
+  
   @override
   void onInit() {
     super.onInit();
@@ -37,21 +34,21 @@ class HomeViewModel extends GetxController {
     searchController.addListener(() {
       currentSearchQuery.value = searchController.text;
     });
-
   }
 
-
   Future<void> fetchCategories() async {
-      isLoading.value = true;
-      var result = await _productsRepository.getCategoriesFromApi();
-      result.when(success: (data){
+    isLoading.value = true;
+    var result = await _productsRepository.getCategoriesFromApi();
+    result.when(
+      success: (data) {
         categories.assignAll(data);
         isLoading.value = false;
-      }, failure: (networkExceptions){
+      },
+      failure: (networkExceptions) {
         error.value = networkExceptions.toString();
         isLoading.value = false;
-      });
-
+      },
+    );
   }
 
   void getProducts() async {
@@ -61,16 +58,21 @@ class HomeViewModel extends GetxController {
 
       result.when(
         success: (data) {
+          debugPrint("========== SUCCESS ==========");
+          debugPrint("Products Count: ${data.length}");
           products.assignAll(data);
         },
         failure: (networkExceptions) {
-          error.value = networkExceptions.toString();
+          debugPrint("========== failure ==========");
+          debugPrint("Products Error: ${networkExceptions.toString()}");
+          error.value = NetworkExceptions.getErrorMessage(networkExceptions as NetworkExceptions);
         },
       );
     } finally {
       isLoading.value = false;
     }
   }
+
   Future<void> searchProducts(String query) async {
     if (query.isEmpty) {
       isSearching.value = false;
@@ -98,5 +100,4 @@ class HomeViewModel extends GetxController {
     isSearching.value = false;
     filteredProducts.clear();
   }
-
 }

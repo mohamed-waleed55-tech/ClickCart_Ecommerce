@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class ThemeManager {
   static final ColorScheme _colorScheme = ColorScheme.fromSeed(
     seedColor: const Color(0xFF388E3C),
@@ -19,10 +20,26 @@ class ThemeManager {
     scaffoldBackgroundColor: _colorScheme.surface,
 
     textTheme: TextTheme(
-      displayLarge: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.bold, color: _colorScheme.onSurface),
-      titleLarge: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold, color: _colorScheme.onSurface),
-      titleMedium: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600, color: _colorScheme.onSurface),
-      bodyLarge: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.normal, color: _colorScheme.onSurface),
+      displayLarge: TextStyle(
+        fontSize: 32.sp,
+        fontWeight: FontWeight.bold,
+        color: _colorScheme.onSurface,
+      ),
+      titleLarge: TextStyle(
+        fontSize: 22.sp,
+        fontWeight: FontWeight.bold,
+        color: _colorScheme.onSurface,
+      ),
+      titleMedium: TextStyle(
+        fontSize: 18.sp,
+        fontWeight: FontWeight.w600,
+        color: _colorScheme.onSurface,
+      ),
+      bodyLarge: TextStyle(
+        fontSize: 16.sp,
+        fontWeight: FontWeight.normal,
+        color: _colorScheme.onSurface,
+      ),
       bodySmall: TextStyle(fontSize: 14.sp, color: _colorScheme.secondary),
     ),
 
@@ -41,6 +58,8 @@ class ThemeManager {
 
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
+        iconColor: _colorScheme.onPrimary,
+    
         backgroundColor: _colorScheme.primary,
         foregroundColor: _colorScheme.onPrimary,
         minimumSize: Size(double.infinity, 50.h),
@@ -54,11 +73,15 @@ class ThemeManager {
       fillColor: Colors.white,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: _colorScheme.secondary.withOpacity(0.2)),
+        borderSide: BorderSide(
+          color: _colorScheme.secondary.withValues(alpha: 0.2),
+        ),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: _colorScheme.secondary.withOpacity(0.2)),
+        borderSide: BorderSide(
+          color: _colorScheme.secondary.withValues(alpha: 0.2),
+        ),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),

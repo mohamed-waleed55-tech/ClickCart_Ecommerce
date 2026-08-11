@@ -85,7 +85,6 @@ class CartRepositoryImp implements CartRepository {
     }
   }
 
-
   @override
   void clearRemoteCartBeforeCommit(WriteBatch batch) {
     _remoteDataSource.clearRemoteCartAfterCheckout(batch);

@@ -1,10 +1,12 @@
-import 'package:flutter/cupertino.dart';
+import 'package:ecommerce_app/core/assets/images_manager.dart';
+import 'package:ecommerce_app/features/home/presentation/widgets/category_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
+
 import '../../../../core/navigation/app_routes.dart';
 import '../view_models/home_view_model.dart';
 
@@ -13,129 +15,235 @@ class CategoryView extends GetView<HomeViewModel> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    return Obx(() {
+      if (controller.categories.isEmpty) {
+        return SizedBox(
+          height: 132.h,
+          child: const Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      }
 
-    return Obx(
-      () => SizedBox(
-        height: 110.h,
-        child: controller.categories.isEmpty
-            ? const Center(child: CircularProgressIndicator())
-            : ListView.separated(
-                padding: REdgeInsets.symmetric(horizontal: 16),
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
-                itemCount: controller.categories.length,
-                separatorBuilder: (_, __) => SizedBox(width: 20.w),
-                itemBuilder: (context, index) {
-                  final category = controller.categories[index];
+      return SizedBox(
+        height: 132.h,
+        child: ListView.separated(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(),
+          itemCount: controller.categories.length,
+          separatorBuilder: (_, __) => SizedBox(width: 14.w),
+          itemBuilder: (context, index) {
+            final category = controller.categories[index];
 
-                  return GestureDetector(
-                    onTap: () {
-                      Get.toNamed(
-                        AppRoutes.categoryProducts,
-                        arguments: category,
-                      );
-                    },
-                    child: SizedBox(
-                      width: 75.w,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 68.r,
-                            height: 68.r,
-                            decoration: BoxDecoration(
-                              color: theme.primaryColor.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(22.r),
-                            ),
-                            child: Center(
-                              child: Icon(
-                                _getCategoryIcon(category.slug),
-                                color: theme.primaryColor,
-                                size: 28.sp,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 8.h),
-                          Text(
-                            category.name ?? "",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: theme.colorScheme.onSurface,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-      ),
-    );
+            final style = _getCategoryStyle(category.slug);
+
+            return CategoryItem(
+              name: category.name ?? 'Category',
+              image: style.image,
+              color: style.color,
+              onTap: () {
+                Get.toNamed(
+                  AppRoutes.categoryProducts,
+                  arguments: category,
+                );
+              },
+            );
+          },
+        ),
+      );
+    });
   }
 
-  IconData _getCategoryIcon(String? slug) {
+  CategoryStyle _getCategoryStyle(String? slug) {
     switch (slug) {
+      // ─────────────────────────────
+      // Beauty
+      // ─────────────────────────────
+
       case 'beauty':
-        return Icons.auto_awesome_outlined;
+        return CategoryStyle(
+          image: ImagesManager.beauty,
+          color: const Color(0xFFE83E8C),
+        );
+
       case 'fragrances':
-        return Icons.science_outlined;
+        return CategoryStyle(
+          image: ImagesManager.fragrances,
+          color: const Color(0xFF9C5CC4),
+        );
+
       case 'skin-care':
-        return Icons.water_drop_outlined;
+        return CategoryStyle(
+          image: ImagesManager.skinCare,
+          color: const Color(0xFF42A5F5),
+        );
+
+      // ─────────────────────────────
+      // Home
+      // ─────────────────────────────
 
       case 'furniture':
-        return Icons.bed_outlined;
+        return CategoryStyle(
+          image: ImagesManager.furniture,
+          color: const Color(0xFF8D6E63),
+        );
+
       case 'groceries':
-        return Icons.shopping_basket_outlined;
+        return CategoryStyle(
+          image: ImagesManager.groceries,
+          color: const Color(0xFF43A047),
+        );
+
       case 'home-decoration':
-        return Icons.home_outlined;
+        return CategoryStyle(
+          image: ImagesManager.homeDecoration,
+          color: const Color(0xFFFF9800),
+        );
+
       case 'kitchen-accessories':
-        return Icons.restaurant_outlined;
+        return CategoryStyle(
+          image: ImagesManager.kitchenAccessories,
+          color: const Color(0xFFEF5350),
+        );
+
+      // ─────────────────────────────
+      // Electronics
+      // ─────────────────────────────
 
       case 'laptops':
-        return Icons.laptop_outlined;
+        return CategoryStyle(
+          image: ImagesManager.laptops,
+          color: const Color(0xFF536DFE),
+        );
+
       case 'tablets':
-        return Icons.tablet_android_outlined;
+        return CategoryStyle(
+          image: ImagesManager.tablets,
+          color: const Color(0xFF7E57C2),
+        );
+
       case 'smartphones':
-        return Icons.smartphone_outlined;
+        return CategoryStyle(
+          image: ImagesManager.smartphones,
+          color: const Color(0xFF2196F3),
+        );
+
       case 'mobile-accessories':
-        return Icons.bluetooth_outlined;
+        return CategoryStyle(
+          image: ImagesManager.mobileAccessories,
+          color: const Color(0xFF00ACC1),
+        );
+
+      // ─────────────────────────────
+      // Men's Fashion
+      // ─────────────────────────────
 
       case 'mens-shirts':
-        return Icons.checkroom_outlined;
+        return CategoryStyle(
+          image: ImagesManager.mensShirts,
+          color: const Color(0xFF1976D2),
+        );
+
       case 'mens-shoes':
-        return Icons.directions_walk_outlined;
+        return CategoryStyle(
+          image: ImagesManager.mensShoes,
+          color: const Color(0xFF455A64),
+        );
+
       case 'mens-watches':
-        return Icons.watch_outlined;
+        return CategoryStyle(
+          image: ImagesManager.mensWatches,
+          color: const Color(0xFF607D8B),
+        );
+
+      // ─────────────────────────────
+      // Women's Fashion
+      // ─────────────────────────────
 
       case 'womens-bags':
-        return Icons.local_mall_outlined;
+        return CategoryStyle(
+          image: ImagesManager.womensBags,
+          color: const Color(0xFFD81B60),
+        );
+
       case 'womens-dresses':
-        return Icons.woman_outlined;
+        return CategoryStyle(
+          image: ImagesManager.womensDresses,
+          color: const Color(0xFFAB47BC),
+        );
+
       case 'womens-jewellery':
-        return Icons.diamond_outlined;
+        return CategoryStyle(
+          image: ImagesManager.womensJewellery,
+          color: const Color(0xFFFFB300),
+        );
+
       case 'womens-shoes':
-        return Icons.shopping_bag_outlined;
+        return CategoryStyle(
+          image: ImagesManager.womensShoes,
+          color: const Color(0xFFFF7043),
+        );
+
       case 'womens-watches':
-        return Icons.access_time_outlined;
+        return CategoryStyle(
+          image: ImagesManager.womensWatches,
+          color: const Color(0xFF8E24AA),
+        );
+
+      // ─────────────────────────────
+      // Accessories
+      // ─────────────────────────────
 
       case 'tops':
-        return Icons.accessibility_new_outlined;
+        return CategoryStyle(
+          image: ImagesManager.tops,
+          color: const Color(0xFF00897B),
+        );
+
       case 'sunglasses':
-        return Icons.wb_sunny_outlined;
+        return CategoryStyle(
+          image: ImagesManager.sunglasses,
+          color: const Color(0xFFFFB300),
+        );
+
       case 'sports-accessories':
-        return Icons.sports_soccer_outlined;
+        return CategoryStyle(
+          image: ImagesManager.sportsAccessories,
+          color: const Color(0xFF2E7D32),
+        );
+
+      // ─────────────────────────────
+      // Vehicles
+      // ─────────────────────────────
 
       case 'motorcycle':
-        return Icons.motorcycle_outlined;
+        return CategoryStyle(
+          image: ImagesManager.motorcycle,
+          color: const Color(0xFF424242),
+        );
+
       case 'vehicle':
-        return Icons.directions_car_outlined;
+        return CategoryStyle(
+          image: ImagesManager.vehicle,
+          color: const Color(0xFF546E7A),
+        );
 
       default:
-        return Icons.apps_outlined;
+        return CategoryStyle(
+          image: ImagesManager.img,
+          color: const Color(0xFF78909C),
+        );
     }
   }
+}
+
+class CategoryStyle {
+  final String image;
+  final Color color;
+
+  const CategoryStyle({
+    required this.image,
+    required this.color,
+  });
 }

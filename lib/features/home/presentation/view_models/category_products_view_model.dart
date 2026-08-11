@@ -2,7 +2,6 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-
 import '../../data/api_error_handling/network_exceptions.dart';
 import '../../data/products_repository/api_result.dart';
 import '../../data/products_repository/products_repository.dart';

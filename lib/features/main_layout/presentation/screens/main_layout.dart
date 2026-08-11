@@ -1,15 +1,15 @@
+import 'package:ecommerce_app/features/ai_shopping/presentation/screen/ai_chat_screen.dart';
+import 'package:ecommerce_app/features/main_layout/presentation/screens/nav_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-
-// 1. Import the library
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 
 import '../../../../core/assets/svg_icons_manager.dart';
 import '../../../cart/presentation/screens/cart.dart';
-import '../../../profile/presentation/screens/profile.dart';
 import '../../../home/presentation/screens/home.dart';
+import '../../../profile/presentation/screens/profile.dart';
 import '../view_models/control_view_model.dart';
 
 class MainLayout extends GetWidget<ControlViewModel> {
@@ -17,102 +17,92 @@ class MainLayout extends GetWidget<ControlViewModel> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> screens = [HomeView(), Cart(), Profile()];
     final theme = Theme.of(context);
 
-    final Color primaryColor = theme.colorScheme.primary;
-
-    final Color activeIconColor = theme.colorScheme.onPrimary;
+    final List<NavItem> navItems = [
+      NavItem(
+        screen: HomeView(),
+        iconPath: SvgIconsManager.explore,
+        label: "Explore",
+      ),
+      NavItem(screen: Cart(), iconPath: SvgIconsManager.cart, label: "Cart"),
+      NavItem(
+        screen: Profile(),
+        iconPath: SvgIconsManager.user,
+        label: "Profile",
+      ),
+    ];
 
     return Scaffold(
       extendBody: true,
       body: GetBuilder<ControlViewModel>(
-        builder: (controller) => screens[controller.navigateIndex],
+        builder: (controller) => navItems[controller.navigateIndex].screen,
       ),
-      bottomNavigationBar: GetBuilder<ControlViewModel>(
-        builder: (controller) =>
-            CurvedNavigationBar(
-              index: controller.navigateIndex,
-              height: 60.h,
-              backgroundColor: Colors.transparent,
-              color: primaryColor,
-              buttonBackgroundColor: primaryColor,
-              animationDuration: const Duration(milliseconds: 750),
-              animationCurve: Curves.easeInOutCubic,
-              onTap: controller.changeNavigateIndex,
 
-              items: <Widget>[
-                _buildNavItem(
-                  iconPath: SvgIconsManager.explore,
-                  label: "Explore",
-                  isSelected: controller.navigateIndex == 0,
-                  activeIconColor: activeIconColor,
-                  primaryColor: primaryColor,
-                  textTheme: theme.textTheme,
-                ),
-                _buildNavItem(
-                  iconPath: SvgIconsManager.cart,
-                  label: "Cart",
-                  isSelected: controller.navigateIndex == 1,
-                  activeIconColor: activeIconColor,
-                  primaryColor: primaryColor,
-                  textTheme: theme.textTheme,
-                ),
-                _buildNavItem(
-                  iconPath: SvgIconsManager.user,
-                  label: "Profile",
-                  isSelected: controller.navigateIndex == 2,
-                  activeIconColor: activeIconColor,
-                  primaryColor: primaryColor,
-                  textTheme: theme.textTheme,
-                ),
-              ],
+    
+
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30.r), 
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20,
+              color: Colors.black.withValues(
+                alpha: .1,
+              ), 
+              offset: const Offset(0, 10),
             ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem({
-    required String iconPath,
-    required String label,
-    required bool isSelected,
-    required Color activeIconColor,
-    required Color primaryColor,
-    required TextTheme textTheme,
-  }) {
-    final Color iconColor = isSelected ? activeIconColor : Colors.white;
-
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w ),
-      alignment: Alignment.center,
-      child: Column(
-
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (!isSelected) ...[ SvgPicture.asset(
-            iconPath,
-            width: 24.w,
-            height: 24.h,
-            colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
+          ],
+        ),
+        margin: REdgeInsets.only(
+          left: 15.w,
+          right: 15.w,
+          bottom: 20.h,
+        ), 
+        padding: REdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+        child: GetBuilder<ControlViewModel>(
+          builder: (controller) => GNav(
+            rippleColor: Colors.grey[300]!,
+            hoverColor: Colors.grey[100]!,
+            haptic: true,
+            gap: 8.w,
+            tabBorderRadius: 20,
+            curve: Curves.easeInOutCubic,
+            duration: const Duration(milliseconds: 500),
+            color: Colors.grey[600],
+            activeColor: theme.colorScheme.primary,
+            iconSize: 24.sp,
+            tabBackgroundColor: theme.colorScheme.primary.withValues(
+              alpha: 0.1,
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+            selectedIndex: controller.navigateIndex,
+            onTabChange: controller.changeNavigateIndex,
+            tabs: navItems
+                .map(
+                  (item) => GButton(
+                    icon: Icons.circle, 
+                    leading: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      child: SvgPicture.asset(
+                        item.iconPath,
+                        key: ValueKey(controller.navigateIndex),
+                        width: 24.w,
+                        colorFilter: ColorFilter.mode(
+                          controller.navigateIndex == navItems.indexOf(item)
+                              ? theme.colorScheme.primary
+                              : Colors.grey,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                    ),
+                    text: item.label,
+                  ),
+                )
+                .toList(),
           ),
-          ],
-
-          if (isSelected) ...[
-            SizedBox(height: 4.h),
-            Padding(
-              padding:  REdgeInsets.all(8.0),
-              child: Text(
-                label,
-                style: textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: activeIconColor,
-                  fontSize: 15.sp,
-                ),
-              ),
-            ),
-          ],
-        ],
+        ),
       ),
     );
   }

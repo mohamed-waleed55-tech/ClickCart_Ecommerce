@@ -30,6 +30,7 @@ class _OnboardingState extends State<Onboarding> {
 
   void _completeOnboarding() async {
     await _storageService.setFirstTimeComplete();
+
     Get.offAllNamed(AppRoutes.authGate);
   }
 

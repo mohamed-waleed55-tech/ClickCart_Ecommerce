@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -165,9 +164,9 @@ abstract class NetworkExceptions with _$NetworkExceptions {
     if (error is Exception) {
       try {
         NetworkExceptions networkExceptions;
-        if (error is DioError) {
+        if (error is DioException) {
           switch (error.type) {
-            case DioErrorType.cancel:
+            case DioExceptionType.cancel:
               networkExceptions = const NetworkExceptions.requestCancelled();
               break;
             case DioExceptionType.connectionTimeout:
@@ -177,7 +176,7 @@ abstract class NetworkExceptions with _$NetworkExceptions {
               networkExceptions =
                   const NetworkExceptions.noInternetConnection();
               break;
-            case DioErrorType.receiveTimeout:
+            case DioExceptionType.receiveTimeout:
               networkExceptions = const NetworkExceptions.sendTimeout();
               break;
             case DioExceptionType.badResponse:
@@ -185,7 +184,7 @@ abstract class NetworkExceptions with _$NetworkExceptions {
                 error.response,
               );
               break;
-            case DioErrorType.sendTimeout:
+            case DioExceptionType.sendTimeout:
               networkExceptions = const NetworkExceptions.sendTimeout();
               break;
             case DioExceptionType.badCertificate:
@@ -195,7 +194,10 @@ abstract class NetworkExceptions with _$NetworkExceptions {
               networkExceptions =
                   const NetworkExceptions.noInternetConnection();
               break;
-          }
+            case DioExceptionType.transformTimeout:
+              networkExceptions = const NetworkExceptions.sendTimeout();
+              break;
+            }
         } else if (error is SocketException) {
           networkExceptions = const NetworkExceptions.noInternetConnection();
         } else {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../view_models/checkout_view_model.dart';
 
 class Checkout extends GetWidget<CheckoutViewModel> {
@@ -12,37 +13,48 @@ class Checkout extends GetWidget<CheckoutViewModel> {
       appBar: AppBar(
         title: const Text(
           'Checkout',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.black87,
+          ),
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: Obx(() => controller.isFirstStep
-            ? const SizedBox.shrink()
-            : IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black87, size: 20),
-          onPressed: controller.previousStep,
-        )),
+        leading: Obx(
+          () => controller.isFirstStep
+              ? const SizedBox.shrink()
+              : IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    color: Colors.black87,
+                    size: 20,
+                  ),
+                  onPressed: controller.previousStep,
+                ),
+        ),
       ),
       body: SafeArea(
         child: Column(
           children: [
             const SizedBox(height: 15),
 
-            // 1. الـ Custom Stepper المحدث (4 خطوات)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0), // قللت الـ padding ليناسب 4 عناصر بشكل مريح
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+              ), // قللت الـ padding ليناسب 4 عناصر بشكل مريح
               child: _buildCustomStepper(),
             ),
 
             const SizedBox(height: 25),
 
-            // 2. عرض شاشات الـ Sub-screens (بما فيها شاشة الدفع عند الوصول لها)
             Expanded(
               child: Obx(
-                    () => AnimatedSwitcher(
+                () => AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
-                  child: controller.checkoutScreens[controller.activeStep.value],
+                  child:
+                      controller.checkoutScreens[controller.activeStep.value],
                 ),
               ),
             ),
@@ -54,9 +66,13 @@ class Checkout extends GetWidget<CheckoutViewModel> {
     );
   }
 
-  // تحديث الميثود لتدعم 4 خطوات بدلاً من 3
   Widget _buildCustomStepper() {
-    final steps = ['Delivery', 'Address', 'Summary', 'Payment']; // أضفنا الخطوة الرابعة هنا
+    final steps = [
+      'Delivery',
+      'Address',
+      'Summary',
+      'Payment',
+    ]; // أضفنا الخطوة الرابعة هنا
     return Obx(() {
       int currentStep = controller.activeStep.value;
       return Row(
@@ -69,14 +85,15 @@ class Checkout extends GetWidget<CheckoutViewModel> {
               children: [
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  width: 28, // صغرت الحجم قليلاً (من 32 لـ 28) لتتسع الشاشة لـ 4 خطوات بدون مشاكل overflow
+                  width:
+                      28, // صغرت الحجم قليلاً (من 32 لـ 28) لتتسع الشاشة لـ 4 خطوات بدون مشاكل overflow
                   height: 28,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: isCurrent
                         ? const Color(0xFF388E3C)
                         : isDone
-                        ? const Color(0xFF388E3C).withOpacity(0.15)
+                        ? const Color(0xFF388E3C).withValues(alpha: 0.15)
                         : Colors.white,
                     border: Border.all(
                       color: isCurrent || isDone
@@ -87,15 +104,21 @@ class Checkout extends GetWidget<CheckoutViewModel> {
                   ),
                   child: Center(
                     child: isDone
-                        ? const Icon(Icons.check_rounded, size: 14, color: Color(0xFF388E3C))
+                        ? const Icon(
+                            Icons.check_rounded,
+                            size: 14,
+                            color: Color(0xFF388E3C),
+                          )
                         : Text(
-                      '${index + 1}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: isCurrent ? Colors.white : Colors.grey.shade600,
-                      ),
-                    ),
+                            '${index + 1}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: isCurrent
+                                  ? Colors.white
+                                  : Colors.grey.shade600,
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -103,7 +126,8 @@ class Checkout extends GetWidget<CheckoutViewModel> {
                 Text(
                   steps[index],
                   style: TextStyle(
-                    fontSize: 11, // تقليل حجم الخط ليناسب التصميم المتجاوب لـ 4 خطوات
+                    fontSize:
+                        11, // تقليل حجم الخط ليناسب التصميم المتجاوب لـ 4 خطوات
                     fontWeight: isCurrent ? FontWeight.bold : FontWeight.w500,
                     color: isCurrent
                         ? Colors.black87
@@ -118,7 +142,9 @@ class Checkout extends GetWidget<CheckoutViewModel> {
                     child: Container(
                       height: 2,
                       margin: const EdgeInsets.symmetric(horizontal: 4),
-                      color: index < currentStep ? const Color(0xFF388E3C) : Colors.grey.shade200,
+                      color: index < currentStep
+                          ? const Color(0xFF388E3C)
+                          : Colors.grey.shade200,
                     ),
                   ),
               ],
@@ -136,7 +162,7 @@ class Checkout extends GetWidget<CheckoutViewModel> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 20,
             offset: const Offset(0, -5),
           ),
@@ -145,20 +171,31 @@ class Checkout extends GetWidget<CheckoutViewModel> {
       child: SafeArea(
         child: Row(
           children: [
-            Obx(() => controller.isFirstStep
-                ? const SizedBox.shrink()
-                : OutlinedButton(
-              onPressed: controller.previousStep,
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
-                side: BorderSide(color: Colors.grey.shade300),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-              child: Text(
-                'Back',
-                style: TextStyle(color: Colors.grey.shade700, fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-            )),
+            Obx(
+              () => controller.isFirstStep
+                  ? const SizedBox.shrink()
+                  : OutlinedButton(
+                      onPressed: controller.previousStep,
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 28,
+                          vertical: 16,
+                        ),
+                        side: BorderSide(color: Colors.grey.shade300),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        'Back',
+                        style: TextStyle(
+                          color: Colors.grey.shade700,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+            ),
 
             Obx(() => SizedBox(width: controller.isFirstStep ? 0 : 16)),
 
@@ -170,13 +207,18 @@ class Checkout extends GetWidget<CheckoutViewModel> {
                   foregroundColor: Colors.white,
                   elevation: 0,
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
                 child: Obx(
-                      () => Text(
-                    // إذا كان بالخطوة الأخيرة (شاشة الدفع) يظهر نص "Pay Now"، وإلا يظهر زر التمرحل العادي
+                  () => Text(
                     controller.isLastStep ? 'Pay Now' : 'Next',
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 0.5),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                    ),
                   ),
                 ),
               ),
