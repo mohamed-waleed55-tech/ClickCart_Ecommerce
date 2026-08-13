@@ -17,8 +17,27 @@
 Built using **Clean Architecture principles**, the **Repository Pattern**, and **GetX**, ClickCart provides maintainable code, efficient state management, and a responsive user interface.
 
 ---
+## 🖼️ App Poster
 
-# 🎥 App Demo
+Here is a quick visual guide of the application's flow and key features. Click to view a larger version.
+
+<div align="center">
+  <img width="500" alt="Alhalaby Order Bot App Poster" src="https://github.com/user-attachments/assets/c53be61b-c3d1-43ea-bf63-2fb346b4f81c" />
+</div>
+
+---
+
+## 🎥 App Demo
+
+Watch a live screen recording showing how users can navigate the menu, select items, and place an order.
+
+<div align="center">
+  <video src="https://github.com/user-attachments/assets/aeddeb43-143b-4b4b-a209-c60054035fdb" controls="controls" style="max-width: 600px;">
+  Your browser does not support the video tag.
+  </video>
+</div>
+
+---
 
 A complete walkthrough showcasing:
 
